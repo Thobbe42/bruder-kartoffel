@@ -6,7 +6,12 @@ public class Enemy {
     private int size = 50;
     private int speed = 250;
 
-    public Enemy() {
+    private double hitPoints;
+
+    private boolean dead = false;
+
+    public Enemy(double hitPoints) {
+        this.hitPoints = hitPoints;
     }
 
     public void update(double dt, double playerPosX, double playerPosY) {
@@ -25,6 +30,12 @@ public class Enemy {
         posY += dy * speed * dt;
     }
 
+    public void dealDamage(double damage) {
+        hitPoints -= damage;
+        if (hitPoints <= 0) {
+            dead = true;
+        }
+    }
 
     public void setPosX(double posX) {
         this.posX = posX;
@@ -44,5 +55,9 @@ public class Enemy {
 
     public int getSize() {
         return size;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 }

@@ -34,6 +34,8 @@ public class GameState {
 
     public void update(double delta) {
         player.update(this, delta);
+
+        enemies.removeIf(Enemy::isDead);
         for (Enemy e: enemies) {
             e.update(delta, player.getPosX(), player.getPosY());
         }
@@ -56,6 +58,7 @@ public class GameState {
 
                 if (distSq <= radiusSum * radiusSum) {
                     proj.setDisabled(true);
+                    e.dealDamage(2);
                 }
             }
         }
@@ -65,7 +68,7 @@ public class GameState {
 
     public void spawnEnemy() {
         double seed = Math.random();
-        Enemy enemy = new Enemy();
+        Enemy enemy = new Enemy(10);
         enemy.setPosX(seed * worldSize.getWidth());
         enemy.setPosY(seed * worldSize.getHeight());
         enemies.add(enemy);
