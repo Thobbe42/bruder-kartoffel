@@ -61,7 +61,7 @@ public class Player {
                 double posX = weaponRadius * Math.cos(Math.toRadians(rotation));
                 double posY = weaponRadius * Math.sin(Math.toRadians(rotation));
 
-                weapon.update(gameState, posX, posY);
+                weapon.update(gameState, posX, posY, delta);
 
                 rotation += space;
             }

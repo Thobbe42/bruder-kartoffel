@@ -39,6 +39,30 @@ public class GameState {
         }
     }
 
+
+    public void handleCollisions() {
+        List<Projectile> projectiles = new LinkedList<>();
+        for (Weapon weapon: player.getWeapons()) {
+            projectiles.addAll(weapon.getProjectiles());
+        }
+
+        for (Projectile proj: projectiles) {
+            for (Enemy e: enemies) {
+                double dx = proj.getPosX() - e.getPosX();
+                double dy = proj.getPosY() - e.getPosY();
+
+                double distSq = dx * dx + dy * dy;
+                int radiusSum = proj.getSize()/2 + e.getSize()/2;
+
+                if (distSq <= radiusSum * radiusSum) {
+                    proj.setDisabled(true);
+                }
+            }
+        }
+    }
+
+
+
     public void spawnEnemy() {
         double seed = Math.random();
         Enemy enemy = new Enemy();

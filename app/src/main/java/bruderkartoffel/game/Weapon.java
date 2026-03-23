@@ -11,14 +11,43 @@ public class Weapon {
 
     private final List<Projectile> projectiles;
 
+    private int shotsPerSecond;
+    private double projectileDelay;
+    private double delayAccumulator;
+
     public Weapon() {
         this.projectiles = new LinkedList<>();
+        shotsPerSecond = 1;
+        delayAccumulator = 0;
     }
 
-    public void update(GameState gameState, double relativeX, double relativeY) {
+    public void update(GameState gameState, double relativeX, double relativeY, double delta) {
         posX = relativeX;
         posY = relativeY;
         angle = calculateRotationAngle(gameState);
+
+        // check attack delay
+        projectileDelay = 1.0/shotsPerSecond;
+        delayAccumulator += delta;
+        if (delayAccumulator >= projectileDelay) {
+
+
+            // world coordinates
+            Player p = gameState.getPlayer();
+            double worldX = p.getPosX() + posX;
+            double worldY = p.getPosY() + posY;
+            spawnProjectile(worldX, worldY);
+            delayAccumulator -= projectileDelay;
+        }
+
+
+        // update projectiles
+        for (Projectile proj: projectiles) {
+            proj.update(delta);
+        }
+
+        // remove dead projectiles
+        projectiles.removeIf(Projectile::isDisabled);
     }
 
     public double getPosX() {
@@ -37,10 +66,10 @@ public class Weapon {
         return this.projectiles;
     }
 
-    private void spawnProjectile() {
+    private void spawnProjectile(double worldX, double worldY) {
         double dirX = Math.cos(angle);
         double dirY = Math.sin(angle);
-        Projectile proj = new Projectile(dirX, dirY, posX, posY);
+        Projectile proj = new Projectile(dirX, dirY, worldX, worldY);
         projectiles.add(proj);
     }
 
@@ -65,5 +94,9 @@ public class Weapon {
         }
 
         return Math.atan2(targetDy, targetDx);
+    }
+
+    public void removeProjectile(Projectile p) {
+        projectiles.remove(p);
     }
 }
