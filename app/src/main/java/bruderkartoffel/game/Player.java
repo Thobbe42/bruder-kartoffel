@@ -1,13 +1,22 @@
 package bruderkartoffel.game;
 
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Player {
 
     private double posX, posY;
 
     private int speed = 300;
 
-    public Player() {
+    private List<Weapon> weapons;
+    private int weaponCount;
 
+    public Player() {
+        weapons = new LinkedList<>();
+        weapons.add(new Weapon());
+        weaponCount = 1;
     }
 
 
@@ -29,6 +38,35 @@ public class Player {
 
         posX += dx * speed * delta;
         posY += dy * speed * delta;
+
+        // calculate relative weapon positions
+
+        if (weaponCount > 0) {
+
+            // center of player
+            int radius = 70/2;
+            Point center = new Point((int)posX + radius, (int)posY + radius);
+
+            // default weapon radius
+            int weaponRadius = (int)(radius * 1.5);
+
+
+            int space = 360 / weaponCount;
+            int rotation = space;
+
+
+            for (Weapon weapon: weapons) {
+
+                double posX = weaponRadius * Math.cos(rotation);
+                double posY = weaponRadius * Math.sin(rotation);
+                System.out.println("X: " + posX + ", Y: " + posY);
+
+                weapon.update(this, 0, 0);
+
+                rotation += space;
+            }
+        }
+
     }
 
     public void setPosX(double posX) {
