@@ -1,14 +1,18 @@
 package bruderkartoffel.game;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Weapon {
 
     private double posX, posY;
     private double angle;
 
-    public Weapon() {
+    private final List<Projectile> projectiles;
 
+    public Weapon() {
+        this.projectiles = new LinkedList<>();
     }
 
     public void update(GameState gameState, double relativeX, double relativeY) {
@@ -27,6 +31,17 @@ public class Weapon {
 
     public double getAngle() {
         return angle;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return this.projectiles;
+    }
+
+    private void spawnProjectile() {
+        double dirX = Math.cos(angle);
+        double dirY = Math.sin(angle);
+        Projectile proj = new Projectile(dirX, dirY, posX, posY);
+        projectiles.add(proj);
     }
 
     private double calculateRotationAngle(GameState gameState) {

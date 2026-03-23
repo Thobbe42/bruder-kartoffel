@@ -9,9 +9,12 @@ public class Projectile {
 
     private int size = 10;
 
-    public Projectile(double dirX, double dirY) {
+    public Projectile(double dirX, double dirY, double posX, double posY) {
         this.dirX = dirX;
         this.dirY = dirY;
+
+        this.posX = posX;
+        this.posY = posY;
     }
 
     public void update(double dt) {

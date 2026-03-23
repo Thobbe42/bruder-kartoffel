@@ -1,9 +1,6 @@
 package bruderkartoffel.gui;
 
-import bruderkartoffel.game.Enemy;
-import bruderkartoffel.game.GameState;
-import bruderkartoffel.game.Player;
-import bruderkartoffel.game.Weapon;
+import bruderkartoffel.game.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,6 +91,15 @@ public class GamePanel extends JPanel {
             g2d.setColor(Color.GREEN);
             g2d.fillOval((int)worldX - 3, (int)worldY - 3, 6, 6);
 
+
+            // draw per-weapon projectiles
+            for (Projectile proj: weapon.getProjectiles()) {
+
+                size = proj.getSize();
+                radius = size/2;
+                g2d.setColor(Color.BLACK);
+                g2d.fillOval((int)proj.getPosX() - radius, (int)proj.getPosY() - radius, size, size);
+            }
         }
 
         // reset transformation
