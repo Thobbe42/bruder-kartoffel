@@ -1,5 +1,8 @@
 package bruderkartoffel.gui;
 
+import bruderkartoffel.game.GameClock;
+import bruderkartoffel.game.GameState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,32 +11,46 @@ import java.awt.event.ComponentEvent;
 
 public class Mainframe extends JFrame {
 
+
+    private GamePanel gamePanel;
+    private GameState gameState;
+
     public Mainframe() {
         // basic metadata
         setTitle("Bruder Kartoffel");
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(null);
+        setLayout(new BorderLayout());
+        setResizable(false);
 
         // init global keys
         initKeyHandling();
 
         // add content
-        GamePanel gp = new GamePanel();
-        add(gp);
+        Dimension size = new Dimension(1920, 1080);
+        gameState = new GameState();
+        gamePanel = new GamePanel(gameState);
+        add(gamePanel, BorderLayout.CENTER);
 
-        // fullscreen sizing
-        setUndecorated(true);
-        setResizable(false);
+        gamePanel.addComponentListener(new ComponentAdapter() {
+            private boolean started = false;
 
-        GraphicsDevice gd = GraphicsEnvironment
-                .getLocalGraphicsEnvironment()
-                .getDefaultScreenDevice();
-        gd.setFullScreenWindow(this);
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (!started) {
+                    started = true;
 
-        // display
+                    gameState.setWorldSize(gamePanel.getSize());
+
+                    Thread gameThread = new Thread(new GameClock(gameState, gamePanel));
+                    gameThread.start();
+                }
+            }
+        });
+
+        setExtendedState(MAXIMIZED_BOTH);
+
         setVisible(true);
-
     }
 
 
@@ -50,5 +67,13 @@ public class Mainframe extends JFrame {
                 System.exit(0);
             }
         });
+    }
+
+    public GamePanel getGamePanel() {
+        return this.gamePanel;
+    }
+
+    public GameState getGameState() {
+        return this.gameState;
     }
 }
