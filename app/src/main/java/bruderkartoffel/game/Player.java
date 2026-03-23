@@ -7,6 +7,7 @@ import java.util.List;
 public class Player {
 
     private double posX, posY;
+    private int size = 70;
 
     private int speed = 300;
 
@@ -92,6 +93,10 @@ public class Player {
     }
 
     public Point getCenter() {
-        return new Point((int)posX + 35, (int)posY + 35);
+        return new Point((int)posX, (int)posY);
+    }
+
+    public int getSize() {
+        return size;
     }
 }

@@ -30,28 +30,30 @@ public class GamePanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D)g;
 
-        // draw player
+        // draw background
         g2d.setColor(Color.lightGray);
         g2d.fillRect(0,0,getWidth(), getHeight());
 
+        // draw player
         g2d.setColor(Color.WHITE);
         Player p = gameState.getPlayer();
-        g2d.fillOval((int)p.getPosX(), (int)p.getPosY(), 70, 70);
+        int radius = p.getSize()/2;
+        g2d.fillOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, 70, 70);
 
         g2d.setColor(Color.RED);
         for (Enemy e: gameState.getEnemies()) {
-            g2d.fillOval((int)e.getPosX(), (int)e.getPosY(), 50, 50);
+            radius = e.getSize()/2;
+            g2d.fillOval((int)e.getPosX() - radius, (int)e.getPosY() -radius, 50, 50);
         }
 
         AffineTransform old = g2d.getTransform();
-        Point playerCenter = p.getCenter();
 
         for (Weapon weapon : p.getWeapons()) {
 
-            double worldX = playerCenter.x + weapon.getPosX();
-            double worldY = playerCenter.y + weapon.getPosY();
+            double worldX = p.getPosX() + weapon.getPosX();
+            double worldY = p.getPosY() + weapon.getPosY();
 
-        /*
+
             // debug
             double angle = weapon.getAngle();
             double length = 40; // how long the debug line is
@@ -76,7 +78,7 @@ public class GamePanel extends JPanel {
                         (int)e.getPosY()
                 );
             }
-        */
+
 
             g2d.translate(worldX, worldY);
             g2d.rotate(weapon.getAngle());
@@ -86,10 +88,10 @@ public class GamePanel extends JPanel {
 
             g2d.setTransform(old);
 
-        /*
+
             g2d.setColor(Color.GREEN);
             g2d.fillOval((int)worldX - 3, (int)worldY - 3, 6, 6);
-         */
+
         }
 
         g2d.setTransform(old);

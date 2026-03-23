@@ -3,10 +3,10 @@ package bruderkartoffel.game;
 public class Enemy {
 
     private double posX, posY;
+    private int size = 50;
     private int speed = 250;
 
     public Enemy() {
-
     }
 
     public void update(double dt, double playerPosX, double playerPosY) {
@@ -40,5 +40,9 @@ public class Enemy {
 
     public double getPosY() {
         return posY;
+    }
+
+    public int getSize() {
+        return size;
     }
 }
