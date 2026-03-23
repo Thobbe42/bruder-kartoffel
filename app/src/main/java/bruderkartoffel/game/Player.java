@@ -51,7 +51,7 @@ public class Player {
             Point center = new Point((int)posX + radius, (int)posY + radius);
 
             // default weapon radius
-            int weaponRadius = (int)(radius * 3);
+            int weaponRadius = (int)(radius * 2);
 
 
             int space = 360 / weaponCount;
@@ -63,7 +63,7 @@ public class Player {
                 double posX = weaponRadius * Math.cos(Math.toRadians(rotation));
                 double posY = weaponRadius * Math.sin(Math.toRadians(rotation));
 
-                weapon.update(center.x, center.y, posX, posY);
+                weapon.update(gameState, posX, posY);
 
                 rotation += space;
             }
@@ -89,5 +89,9 @@ public class Player {
 
     public List<Weapon> getWeapons() {
         return weapons;
+    }
+
+    public Point getCenter() {
+        return new Point((int)posX + 35, (int)posY + 35);
     }
 }

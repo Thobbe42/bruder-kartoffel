@@ -7,6 +7,7 @@ import bruderkartoffel.game.Weapon;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 public class GamePanel extends JPanel {
 
@@ -42,9 +43,55 @@ public class GamePanel extends JPanel {
             g2d.fillOval((int)e.getPosX(), (int)e.getPosY(), 50, 50);
         }
 
-        g2d.setColor(Color.WHITE);
-        for (Weapon weapon: p.getWeapons()) {
-            g2d.fillRect((int)weapon.getPosX(), (int)weapon.getPosY(), 30, 10);
+        AffineTransform old = g2d.getTransform();
+        Point playerCenter = p.getCenter();
+
+        for (Weapon weapon : p.getWeapons()) {
+
+            double worldX = playerCenter.x + weapon.getPosX();
+            double worldY = playerCenter.y + weapon.getPosY();
+
+        /*
+            // debug
+            double angle = weapon.getAngle();
+            double length = 40; // how long the debug line is
+
+            double dirX = Math.cos(angle) * length;
+            double dirY = Math.sin(angle) * length;
+
+            g2d.setColor(Color.RED);
+            g2d.drawLine(
+                    (int)worldX,
+                    (int)worldY,
+                    (int)(worldX + dirX),
+                    (int)(worldY + dirY)
+            );
+
+            for (Enemy e: gameState.getEnemies()) {
+                g2d.setColor(Color.BLUE);
+                g2d.drawLine(
+                        (int)worldX,
+                        (int)worldY,
+                        (int)e.getPosX(),
+                        (int)e.getPosY()
+                );
+            }
+        */
+
+            g2d.translate(worldX, worldY);
+            g2d.rotate(weapon.getAngle());
+
+            g2d.setColor(Color.BLACK);
+            g2d.fillRect(-15, -5, 30, 10);
+
+            g2d.setTransform(old);
+
+        /*
+            g2d.setColor(Color.GREEN);
+            g2d.fillOval((int)worldX - 3, (int)worldY - 3, 6, 6);
+         */
         }
+
+        g2d.setTransform(old);
     }
 }
