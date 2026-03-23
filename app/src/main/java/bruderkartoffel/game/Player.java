@@ -15,8 +15,11 @@ public class Player {
 
     public Player() {
         weapons = new LinkedList<>();
-        weapons.add(new Weapon());
-        weaponCount = 1;
+
+        for (int i = 0; i < 6; i++) {
+            weapons.add(new Weapon());
+            weaponCount++;
+        }
     }
 
 
@@ -48,7 +51,7 @@ public class Player {
             Point center = new Point((int)posX + radius, (int)posY + radius);
 
             // default weapon radius
-            int weaponRadius = (int)(radius * 1.5);
+            int weaponRadius = (int)(radius * 3);
 
 
             int space = 360 / weaponCount;
@@ -57,11 +60,10 @@ public class Player {
 
             for (Weapon weapon: weapons) {
 
-                double posX = weaponRadius * Math.cos(rotation);
-                double posY = weaponRadius * Math.sin(rotation);
-                System.out.println("X: " + posX + ", Y: " + posY);
+                double posX = weaponRadius * Math.cos(Math.toRadians(rotation));
+                double posY = weaponRadius * Math.sin(Math.toRadians(rotation));
 
-                weapon.update(this, 0, 0);
+                weapon.update(center.x, center.y, posX, posY);
 
                 rotation += space;
             }
@@ -83,5 +85,9 @@ public class Player {
 
     public double getPosY() {
         return posY;
+    }
+
+    public List<Weapon> getWeapons() {
+        return weapons;
     }
 }

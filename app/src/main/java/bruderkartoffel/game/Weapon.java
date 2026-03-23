@@ -8,9 +8,9 @@ public class Weapon {
 
     }
 
-    public void update(Player p, double relativeX, double relativeY) {
-        posX = p.getPosX() + relativeX;
-        posY = p.getPosY() + relativeY;
+    public void update(double centerX, double centerY, double relativeX, double relativeY) {
+        posX = centerX + relativeX;
+        posY = centerY + relativeY;
     }
 
     public double getPosX() {
