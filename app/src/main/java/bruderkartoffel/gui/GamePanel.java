@@ -1,5 +1,6 @@
 package bruderkartoffel.gui;
 
+import bruderkartoffel.game.Enemy;
 import bruderkartoffel.game.GameState;
 import bruderkartoffel.game.Player;
 
@@ -34,5 +35,10 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.WHITE);
         Player p = gameState.getPlayer();
         g2d.fillOval((int)p.getPosX(), (int)p.getPosY(), 70, 70);
+
+        g2d.setColor(Color.RED);
+        for (Enemy e: gameState.getEnemies()) {
+            g2d.fillOval((int)e.getPosX(), (int)e.getPosY(), 50, 50);
+        }
     }
 }
