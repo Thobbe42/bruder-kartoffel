@@ -25,10 +25,11 @@ public class GameState {
         player.setPosX(worldSize.getWidth()/2);
         player.setPosY(worldSize.getHeight()/2);
 
-        Enemy e = new Enemy();
-        e.setPosX(300);
-        e.setPosY(200);
-        enemies.add(e);
+
+        // spawn 4 enemies for testing
+        for (int i = 0; i < 4; i++) {
+            spawnEnemy();
+        }
     }
 
     public void update(double delta) {
@@ -36,6 +37,14 @@ public class GameState {
         for (Enemy e: enemies) {
             e.update(delta, player.getPosX(), player.getPosY());
         }
+    }
+
+    public void spawnEnemy() {
+        double seed = Math.random();
+        Enemy enemy = new Enemy();
+        enemy.setPosX(seed * worldSize.getWidth());
+        enemy.setPosY(seed * worldSize.getHeight());
+        enemies.add(enemy);
     }
 
 
