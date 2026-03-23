@@ -44,16 +44,13 @@ public class Player {
         posY += dy * speed * delta;
 
         // calculate relative weapon positions
-
         if (weaponCount > 0) {
 
             // center of player
-            int radius = 70/2;
-            Point center = new Point((int)posX + radius, (int)posY + radius);
+            int radius = size/2;
 
             // default weapon radius
             int weaponRadius = (int)(radius * 2);
-
 
             int space = 360 / weaponCount;
             int rotation = space;
@@ -90,10 +87,6 @@ public class Player {
 
     public List<Weapon> getWeapons() {
         return weapons;
-    }
-
-    public Point getCenter() {
-        return new Point((int)posX, (int)posY);
     }
 
     public int getSize() {

@@ -35,11 +35,10 @@ public class Weapon {
         double targetDx = 0;
         double targetDy = 0;
         Player p = gameState.getPlayer();
-        Point center = p.getCenter();
 
         for (Enemy e : gameState.getEnemies()) {
-            double dx = e.getPosX() - (center.x + posX);
-            double dy = e.getPosY() - (center.y + posY);
+            double dx = e.getPosX() - (p.getPosX() + posX);
+            double dy = e.getPosY() - (p.getPosY() + posY);
 
             double distance = Math.sqrt(dx * dx + dy * dy);
 
