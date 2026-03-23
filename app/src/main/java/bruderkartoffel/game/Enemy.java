@@ -1,0 +1,44 @@
+package bruderkartoffel.game;
+
+public class Enemy {
+
+    private double posX, posY;
+    private int speed = 250;
+
+    public Enemy() {
+
+    }
+
+    public void update(double dt, double playerPosX, double playerPosY) {
+
+        double dx = playerPosX - posX;
+        double dy = playerPosY - posY;
+
+        double length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length != 0) {
+            dx /= length;
+            dy /= length;
+        }
+
+        posX += dx * speed * dt;
+        posY += dy * speed * dt;
+    }
+
+
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+
+    public void setPosY(double posY) {
+        this.posY = posY;
+    }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+}
