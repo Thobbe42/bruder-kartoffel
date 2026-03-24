@@ -89,8 +89,6 @@ public class GameState {
 
     public void spawnEnemy() {
         int protectedRadius = player.getSize() * 3;
-
-        Enemy enemy = new Enemy(10, 1);
         double posX, posY, dist;
 
         do {
@@ -102,6 +100,41 @@ public class GameState {
 
              dist = Math.sqrt(dx * dx + dy * dy);
         } while (dist <= protectedRadius);
+
+        spawnEnemyAt(posX, posY);
+    }
+
+    public void spawnEnemyBatch(int amount) {
+        double baseX, baseY;
+        int protectedRadius = player.getSize() * 3;
+        int radius = 50 + (amount * 4);
+        double dist;
+
+        do {
+            baseX = Math.random() * worldSize.getWidth();
+            baseY = Math.random() * worldSize.getHeight();
+
+            double dx = player.getPosX() - baseX;
+            double dy = player.getPosY() - baseY;
+
+            dist = Math.sqrt(dx * dx + dy * dy);
+
+        } while(dist <= (protectedRadius + radius));
+
+        for (int i = 0; i < amount; i++) {
+            // calculate random point in the batch spawn circle
+            double angle = Math.random() * 2 * Math.PI;
+            double r = Math.sqrt(Math.random()) * radius;
+
+            double posX= baseX + r * Math.cos(angle);
+            double posY = baseY + r * Math.sin(angle);
+
+            spawnEnemyAt(posX, posY);
+        }
+    }
+
+    private void spawnEnemyAt(double posX, double posY) {
+        Enemy enemy = new Enemy(10, 1);
 
         enemy.setPosX(posX);
         enemy.setPosY(posY);
