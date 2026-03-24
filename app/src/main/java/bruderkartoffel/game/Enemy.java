@@ -95,4 +95,8 @@ public class Enemy {
     public double getBaseDamage() {
         return baseDamage;
     }
+
+    public boolean isTargetable() {
+        return !spawning && !dead;
+    }
 }

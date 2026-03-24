@@ -11,16 +11,22 @@ public class Weapon {
 
     private final List<Projectile> projectiles;
 
+    private double range;
+
     private int shotsPerSecond;
     private double projectileDelay;
     private double delayAccumulator;
 
     private double baseDamage;
 
-    public Weapon(int shotsPerSecond, double baseDamage) {
+    public boolean hasTarget;
+
+    public Weapon(int shotsPerSecond, double baseDamage, double range) {
         this.projectiles = new LinkedList<>();
         this.shotsPerSecond = shotsPerSecond;
         this.baseDamage = baseDamage;
+        this.range = range;
+        hasTarget = false;
         delayAccumulator = 0;
     }
 
@@ -39,7 +45,9 @@ public class Weapon {
             Player p = gameState.getPlayer();
             double worldX = p.getPosX() + posX;
             double worldY = p.getPosY() + posY;
-            spawnProjectile(worldX, worldY);
+            if (hasTarget) {
+                spawnProjectile(worldX, worldY);
+            }
             delayAccumulator -= projectileDelay;
         }
 
@@ -77,29 +85,49 @@ public class Weapon {
     }
 
     private double calculateRotationAngle(GameState gameState) {
-        double minDistance = Double.MAX_VALUE;
 
-        double targetDx = 0;
-        double targetDy = 0;
-        Player p = gameState.getPlayer();
+        Enemy target = getTarget(gameState);
+        if (target == null) return 0;
 
-        for (Enemy e : gameState.getEnemies()) {
-            double dx = e.getPosX() - (p.getPosX() + posX);
-            double dy = e.getPosY() - (p.getPosY() + posY);
-
-            double distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                targetDx = dx;
-                targetDy = dy;
-            }
-        }
+        double wx = gameState.getPlayer().getPosX() + posX;
+        double wy = gameState.getPlayer().getPosY() + posY;
+        double targetDx = target.getPosX() - wx;
+        double targetDy = target.getPosY() - wy;
 
         return Math.atan2(targetDy, targetDx);
     }
 
+    private Enemy getTarget(GameState gameState) {
+
+        Enemy closest = null;
+        double minDistSq = range * range;
+
+        double wx = gameState.getPlayer().getPosX() + posX;
+        double wy = gameState.getPlayer().getPosY() + posY;
+
+        for (Enemy e : gameState.getEnemies()) {
+            if (e.isTargetable()) {
+                double dx = e.getPosX() - wx;
+                double dy = e.getPosY() - wy;
+
+                double distSq = dx * dx + dy * dy;
+
+                if (distSq <= minDistSq) {
+                    minDistSq = distSq;
+                    closest = e;
+                }
+            }
+        }
+
+        hasTarget = (closest != null);
+        return closest;
+    }
+
     public void removeProjectile(Projectile p) {
         projectiles.remove(p);
+    }
+
+    public double getRange() {
+        return range;
     }
 }

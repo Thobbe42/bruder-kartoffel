@@ -23,7 +23,7 @@ public class App {
                 gs.spawnEnemy();
                 gs.spawnEnemy();
                 gs.spawnEnemy();
-                Thread.sleep(3000);
+                Thread.sleep(4500);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

@@ -7,6 +7,8 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePanel extends JPanel {
 
@@ -60,7 +62,14 @@ public class GamePanel extends JPanel {
         g2d.fillOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
         // draw enemies
-        for (Enemy e: gameState.getEnemies()) {
+
+        List<Enemy> enemiesSnapshot;
+
+        synchronized (gameState.getEnemies()) {
+            enemiesSnapshot = new ArrayList<>(gameState.getEnemies());
+        }
+
+        for (Enemy e: enemiesSnapshot) {
             if (!e.isSpawning()) {
                 g2d.setColor(new Color(128, 0, 128));
                 size = e.getSize();
@@ -100,20 +109,21 @@ public class GamePanel extends JPanel {
                     (int)(worldY + dirY)
             );
 
-            for (Enemy e: gameState.getEnemies()) {
-                g2d.setColor(Color.BLUE);
-                g2d.drawLine(
-                        (int)worldX,
-                        (int)worldY,
-                        (int)e.getPosX(),
-                        (int)e.getPosY()
-                );
-            }
+            radius = (int)weapon.getRange();
+            size = radius * 2;
+            g2d.drawOval((int)worldX - radius, (int)worldY - radius, size, size);
 
-            // player protective cirle
-            int protRadius = gameState.getPlayer().getSize() * 3;
-            g2d.setColor(Color.CYAN);
-            g2d.drawOval((int)gameState.getPlayer().getPosX() - protRadius, (int)gameState.getPlayer().getPosY() - protRadius, protRadius*2, protRadius*2);
+            for (Enemy e: gameState.getEnemies()) {
+                if (e.isTargetable()) {
+                    g2d.setColor(Color.BLUE);
+                    g2d.drawLine(
+                            (int) worldX,
+                            (int) worldY,
+                            (int) e.getPosX(),
+                            (int) e.getPosY()
+                    );
+                }
+            }
 
             // weapon transformation
             g2d.translate(worldX, worldY);
@@ -137,6 +147,12 @@ public class GamePanel extends JPanel {
                 g2d.fillOval((int)proj.getPosX() - radius, (int)proj.getPosY() - radius, size, size);
             }
         }
+
+        // player protective cirle
+        int protRadius = gameState.getPlayer().getSize() * 3;
+        g2d.setColor(Color.CYAN);
+        g2d.drawOval((int)gameState.getPlayer().getPosX() - protRadius, (int)gameState.getPlayer().getPosY() - protRadius, protRadius*2, protRadius*2);
+
 
         // reset transformation
         g2d.setTransform(old);
