@@ -60,6 +60,8 @@ public class GamePanel extends JPanel {
         int size = p.getSize();
         int radius = size/2;
         g2d.fillOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
+        g2d.setColor(Color.BLACK);
+        g2d.drawOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
         // draw enemies
 
@@ -75,6 +77,8 @@ public class GamePanel extends JPanel {
                 size = e.getSize();
                 radius = size / 2;
                 g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+                g2d.setColor(Color.BLACK);
+                g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
             } else {
                 // blink animation
                 if (e.isShowSpawn()) {
