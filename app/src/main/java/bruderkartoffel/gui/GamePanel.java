@@ -77,7 +77,7 @@ public class GamePanel extends JPanel {
 
             // debug
             double angle = weapon.getAngle();
-            double length = 40; // how long the debug line is
+            double length = 40;
 
             double dirX = Math.cos(angle) * length;
             double dirY = Math.sin(angle) * length;
@@ -99,6 +99,11 @@ public class GamePanel extends JPanel {
                         (int)e.getPosY()
                 );
             }
+
+            // player protective cirle
+            int protRadius = gameState.getPlayer().getSize() * 3;
+            g2d.setColor(Color.CYAN);
+            g2d.drawOval((int)gameState.getPlayer().getPosX() - protRadius, (int)gameState.getPlayer().getPosY() - protRadius, protRadius*2, protRadius*2);
 
             // weapon transformation
             g2d.translate(worldX, worldY);

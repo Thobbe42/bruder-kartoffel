@@ -90,9 +90,23 @@ public class GameState {
 
 
     public void spawnEnemy() {
+        int protectedRadius = player.getSize() * 3;
+
         Enemy enemy = new Enemy(10, 1);
-        enemy.setPosX(Math.random() * worldSize.getWidth());
-        enemy.setPosY(Math.random() * worldSize.getHeight());
+        double posX, posY, dist;
+
+        do {
+            posX = Math.random() * worldSize.getWidth();
+            posY = Math.random() * worldSize.getHeight();
+
+            double dx = player.getPosX() - posX;
+            double dy = player.getPosY() - posY;
+
+             dist = Math.sqrt(dx * dx + dy * dy);
+        } while (dist <= protectedRadius);
+
+        enemy.setPosX(posX);
+        enemy.setPosY(posY);
         enemies.add(enemy);
     }
 
