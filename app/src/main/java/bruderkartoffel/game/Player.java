@@ -1,6 +1,5 @@
 package bruderkartoffel.game;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,13 +9,14 @@ public class Player {
     private int size = 70;
 
     private int speed = 300;
-    private double hitPoints;
+    private double hitPoints, maxHitPoints;
 
     private List<Weapon> weapons;
     private int weaponCount;
 
     public Player(double hitPoints) {
         this.hitPoints = hitPoints;
+        this.maxHitPoints = hitPoints;
         weapons = new LinkedList<>();
 
         for (int i = 0; i < 6; i++) {
@@ -97,5 +97,13 @@ public class Player {
 
     public double getHitPoints() {
         return hitPoints;
+    }
+
+    public double getMaxHitPoints() {
+        return maxHitPoints;
+    }
+
+    public void dealDamage(double damage) {
+        this.hitPoints -= damage;
     }
 }

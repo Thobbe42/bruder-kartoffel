@@ -7,11 +7,13 @@ public class Enemy {
     private int speed = 250;
 
     private double hitPoints;
+    private double baseDamage;
 
     private boolean dead = false;
 
-    public Enemy(double hitPoints) {
+    public Enemy(double hitPoints, double baseDamage) {
         this.hitPoints = hitPoints;
+        this.baseDamage = baseDamage;
     }
 
     public void update(double dt, double playerPosX, double playerPosY) {
@@ -59,5 +61,9 @@ public class Enemy {
 
     public boolean isDead() {
         return dead;
+    }
+
+    public double getBaseDamage() {
+        return baseDamage;
     }
 }

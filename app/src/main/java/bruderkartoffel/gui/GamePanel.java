@@ -22,7 +22,9 @@ public class GamePanel extends JPanel {
         playerHitPoints.setBackground(Color.RED);
         playerHitPoints.setFont(new Font("Bold", Font.BOLD, 18));
         playerHitPoints.setHorizontalAlignment(SwingConstants.CENTER);
-        playerHitPoints.setText("HP: " + (int)gameState.getPlayer().getHitPoints());
+        int hp = (int)gameState.getPlayer().getHitPoints();
+        int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
+        playerHitPoints.setText("HP: " + hp + "/" + maxHp);
         playerHitPoints.setOpaque(true);
         playerHitPoints.setBorder(new LineBorder(Color.BLACK, 2));
 
@@ -41,6 +43,10 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D)g;
+
+        int hp = (int)gameState.getPlayer().getHitPoints();
+        int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
+        playerHitPoints.setText("HP: " + hp + "/" + maxHp);
 
         // draw background
         g2d.setColor(Color.lightGray);
