@@ -36,7 +36,7 @@ public class GameState {
 
     public void update(double delta) {
         player.update(this, delta);
-
+        enemies.removeIf(Enemy::isDead);
         for (Enemy e: enemies) {
             e.update(delta, player.getPosX(), player.getPosY());
         }
@@ -83,8 +83,6 @@ public class GameState {
                 }
             }
         }
-
-        enemies.removeIf(Enemy::isDead);
     }
 
 

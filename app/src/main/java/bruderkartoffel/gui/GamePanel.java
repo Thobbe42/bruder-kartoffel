@@ -60,11 +60,21 @@ public class GamePanel extends JPanel {
         g2d.fillOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
         // draw enemies
-        g2d.setColor(new Color(128, 0, 128));
         for (Enemy e: gameState.getEnemies()) {
-            size = e.getSize();
-            radius = size/2;
-            g2d.fillOval((int)e.getPosX() - radius, (int)e.getPosY() -radius, size, size);
+            if (!e.isSpawning()) {
+                g2d.setColor(new Color(128, 0, 128));
+                size = e.getSize();
+                radius = size / 2;
+                g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+            } else {
+                // blink animation
+                if (e.isShowSpawn()) {
+                    g2d.setColor(Color.RED);
+                    size = e.getSize() / 2;
+                    radius = size / 2;
+                    g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+                }
+            }
         }
 
         // draw weapons
