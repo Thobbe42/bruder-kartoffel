@@ -10,11 +10,13 @@ public class Player {
     private int size = 70;
 
     private int speed = 300;
+    private double hitPoints;
 
     private List<Weapon> weapons;
     private int weaponCount;
 
-    public Player() {
+    public Player(double hitPoints) {
+        this.hitPoints = hitPoints;
         weapons = new LinkedList<>();
 
         for (int i = 0; i < 6; i++) {
@@ -91,5 +93,9 @@ public class Player {
 
     public int getSize() {
         return size;
+    }
+
+    public double getHitPoints() {
+        return hitPoints;
     }
 }

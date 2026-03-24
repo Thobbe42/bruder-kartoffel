@@ -10,7 +10,7 @@ public class App {
         Mainframe frame = new Mainframe();
         GameState gs = frame.getGameState();
 
-    /*    try {
+        try {
             Thread.sleep(2000);
             for (int i = 0; i < 5; i++) {
                 gs.spawnEnemy();
@@ -28,6 +28,6 @@ public class App {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    */
+    
     }
 }

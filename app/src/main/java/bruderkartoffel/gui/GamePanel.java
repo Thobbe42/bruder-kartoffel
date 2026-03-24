@@ -3,6 +3,8 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
@@ -10,9 +12,22 @@ public class GamePanel extends JPanel {
 
     private final GameState gameState;
 
+    private final JLabel playerHitPoints;
+
     public GamePanel(GameState gameState) {
 
         this.gameState = gameState;
+        this.playerHitPoints = new JLabel();
+        playerHitPoints.setBounds(10, 10, 300, 25);
+        playerHitPoints.setBackground(Color.RED);
+        playerHitPoints.setFont(new Font("Bold", Font.BOLD, 18));
+        playerHitPoints.setHorizontalAlignment(SwingConstants.CENTER);
+        playerHitPoints.setText("HP: " + (int)gameState.getPlayer().getHitPoints());
+        playerHitPoints.setOpaque(true);
+        playerHitPoints.setBorder(new LineBorder(Color.BLACK, 2));
+
+        setLayout(null);
+        add(playerHitPoints);
 
         KeyHandler kh = new KeyHandler(gameState);
         addKeyListener(kh);

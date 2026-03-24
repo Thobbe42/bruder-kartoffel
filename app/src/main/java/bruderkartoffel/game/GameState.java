@@ -14,7 +14,7 @@ public class GameState {
     private Dimension worldSize;
 
     public GameState() {
-        this.player = new Player();
+        this.player = new Player(20);
         this.enemies = new LinkedList<>();
     }
 
