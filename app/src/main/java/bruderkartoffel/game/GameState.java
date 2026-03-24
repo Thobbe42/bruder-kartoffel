@@ -67,10 +67,9 @@ public class GameState {
 
 
     public void spawnEnemy() {
-        double seed = Math.random();
         Enemy enemy = new Enemy(10);
-        enemy.setPosX(seed * worldSize.getWidth());
-        enemy.setPosY(seed * worldSize.getHeight());
+        enemy.setPosX(Math.random() * worldSize.getWidth());
+        enemy.setPosY(Math.random() * worldSize.getHeight());
         enemies.add(enemy);
     }
 

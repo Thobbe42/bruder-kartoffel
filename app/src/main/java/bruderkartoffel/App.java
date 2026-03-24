@@ -15,6 +15,14 @@ public class App {
             for (int i = 0; i < 5; i++) {
                 gs.spawnEnemy();
                 gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
+                gs.spawnEnemy();
                 Thread.sleep(3000);
             }
         } catch (InterruptedException e) {
