@@ -58,7 +58,7 @@ public class GameState {
 
                 if (distSq <= radiusSum * radiusSum) {
                     proj.setDisabled(true);
-                    e.dealDamage(2);
+                    e.dealDamage(proj.getDamage());
                 }
             }
         }

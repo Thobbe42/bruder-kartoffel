@@ -18,7 +18,7 @@ public class Player {
         weapons = new LinkedList<>();
 
         for (int i = 0; i < 6; i++) {
-            weapons.add(new Weapon());
+            weapons.add(new Weapon(3, 2));
             weaponCount++;
         }
     }

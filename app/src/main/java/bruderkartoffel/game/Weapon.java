@@ -15,9 +15,12 @@ public class Weapon {
     private double projectileDelay;
     private double delayAccumulator;
 
-    public Weapon() {
+    private double baseDamage;
+
+    public Weapon(int shotsPerSecond, double baseDamage) {
         this.projectiles = new LinkedList<>();
-        shotsPerSecond = 1;
+        this.shotsPerSecond = shotsPerSecond;
+        this.baseDamage = baseDamage;
         delayAccumulator = 0;
     }
 
@@ -69,7 +72,7 @@ public class Weapon {
     private void spawnProjectile(double worldX, double worldY) {
         double dirX = Math.cos(angle);
         double dirY = Math.sin(angle);
-        Projectile proj = new Projectile(dirX, dirY, worldX, worldY);
+        Projectile proj = new Projectile(dirX, dirY, worldX, worldY, baseDamage);
         projectiles.add(proj);
     }
 

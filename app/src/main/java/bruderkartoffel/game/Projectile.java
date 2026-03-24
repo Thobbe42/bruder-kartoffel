@@ -9,9 +9,11 @@ public class Projectile {
 
     private double dirX, dirY;
 
+    private double damage;
+
     private int size = 10;
 
-    public Projectile(double dirX, double dirY, double posX, double posY) {
+    public Projectile(double dirX, double dirY, double posX, double posY, double damage) {
         this.dirX = dirX;
         this.dirY = dirY;
 
@@ -19,6 +21,8 @@ public class Projectile {
         this.posY = posY;
         this.startX = posX;
         this.startY = posY;
+
+        this.damage = damage;
     }
 
     public void update(double dt) {
@@ -53,5 +57,9 @@ public class Projectile {
 
     public boolean isDisabled() {
         return disabled;
+    }
+
+    public double getDamage() {
+        return damage;
     }
 }
