@@ -22,9 +22,50 @@ public class Enemy {
         this.baseDamage = baseDamage;
     }
 
-    public void update(double dt, double playerPosX, double playerPosY) {
+    public void update(GameState gameState, double dt, double playerPosX, double playerPosY) {
 
         if (!spawning) {
+
+            // avoid blobs
+            double sepX = 0;
+            double sepY = 0;
+            int count = 0;
+
+            for (Enemy other: gameState.getEnemies()) {
+                if (other == this) continue;
+
+                double dx = posX - other.getPosX();
+                double dy = posY - other.getPosY();
+
+                double distSq = dx * dx + dy * dy;
+                double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.7;
+
+                if (distSq < minDist * minDist && distSq > 0) {
+                    double dist = Math.sqrt(distSq);
+
+                    // normalize
+                    dx /= dist;
+                    dy /= dist;
+
+                    // push strength (stronger when closer)
+                    double strength = (minDist - dist);
+
+                    sepX += dx * strength;
+                    sepY += dy * strength;
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                sepX /= count;
+                sepY /= count;
+
+                posX += sepX * 0.1; // tweak factor
+                posY += sepY * 0.1;
+            }
+
+
+
             double dx = playerPosX - posX;
             double dy = playerPosY - posY;
 

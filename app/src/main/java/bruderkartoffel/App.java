@@ -13,16 +13,9 @@ public class App {
         try {
             Thread.sleep(2000);
             for (int i = 0; i < 5; i++) {
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
-                gs.spawnEnemy();
+                gs.spawnEnemyBatch(10);
+                gs.spawnEnemyBatch(6);
+                gs.spawnEnemyBatch(6);
                 Thread.sleep(4500);
             }
         } catch (InterruptedException e) {

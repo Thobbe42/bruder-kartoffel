@@ -38,7 +38,7 @@ public class GameState {
         player.update(this, delta);
         enemies.removeIf(Enemy::isDead);
         for (Enemy e: enemies) {
-            e.update(delta, player.getPosX(), player.getPosY());
+            e.update(this, delta, player.getPosX(), player.getPosY());
         }
     }
 

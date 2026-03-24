@@ -113,7 +113,7 @@ public class GamePanel extends JPanel {
             size = radius * 2;
             g2d.drawOval((int)worldX - radius, (int)worldY - radius, size, size);
 
-            for (Enemy e: gameState.getEnemies()) {
+            for (Enemy e: enemiesSnapshot) {
                 if (e.isTargetable()) {
                     g2d.setColor(Color.BLUE);
                     g2d.drawLine(
