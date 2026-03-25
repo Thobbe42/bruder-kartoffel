@@ -127,6 +127,10 @@ public class Player {
         return this.experience;
     }
 
+    public int getExperienceForLevelup() {
+        return experienceForLevelup;
+    }
+
     public void addExperience(int experience) {
         this.experience += experience;
         if (this.experience >= experienceForLevelup) {

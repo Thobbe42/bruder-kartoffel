@@ -22,26 +22,22 @@ public class GamePanel extends JPanel {
         this.gameState = gameState;
         this.playerHitPoints = new JLabel();
         playerHitPoints.setBounds(15, 15, 400, 40);
-        playerHitPoints.setBackground(Color.RED);
         playerHitPoints.setForeground(Color.WHITE);
         playerHitPoints.setFont(new Font("Bold", Font.BOLD, 25));
         playerHitPoints.setHorizontalAlignment(SwingConstants.CENTER);
         int hp = (int)gameState.getPlayer().getHitPoints();
         int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
         playerHitPoints.setText(hp + "/" + maxHp);
-        playerHitPoints.setOpaque(true);
         playerHitPoints.setBorder(new LineBorder(Color.BLACK, 4));
 
         playerExperience = new JLabel();
         playerExperience.setBounds(15, 70, 400, 40);
-        playerExperience.setBackground(Color.GREEN);
         playerExperience.setForeground(Color.WHITE);
         playerExperience.setFont(new Font("Bold", Font.BOLD, 25));
         playerExperience.setHorizontalAlignment(SwingConstants.RIGHT);
         int exp = (int)gameState.getPlayer().getExperience();
         int level = gameState.getPlayer().getLevel();
         playerExperience.setText("Lvl: " + level);
-        playerExperience.setOpaque(true);
         playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
 
 
@@ -63,16 +59,10 @@ public class GamePanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D)g;
 
-        int hp = (int)gameState.getPlayer().getHitPoints();
-        int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
-        playerHitPoints.setText(hp + "/" + maxHp);
-
-        int level = gameState.getPlayer().getLevel();
-        playerExperience.setText("Level: " + level);
-
         // draw background
         g2d.setColor(Color.lightGray);
         g2d.fillRect(0,0,getWidth(), getHeight());
+
 
         // draw player
         g2d.setColor(Color.WHITE);
@@ -176,6 +166,33 @@ public class GamePanel extends JPanel {
         int protRadius = gameState.getPlayer().getSize() * 3;
         g2d.setColor(Color.CYAN);
         g2d.drawOval((int)gameState.getPlayer().getPosX() - protRadius, (int)gameState.getPlayer().getPosY() - protRadius, protRadius*2, protRadius*2);
+
+
+
+        // draw hp/exp indicators
+        double hp = gameState.getPlayer().getHitPoints();
+        double maxHp = gameState.getPlayer().getMaxHitPoints();
+
+        int width = (int)(hp/maxHp * 400);
+        g2d.setColor(Color.RED);
+        g2d.fillRect(15, 15, width, 40);
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(15 + width, 15, 400 - width, 40);
+
+        playerHitPoints.setText((int)hp + "/" + (int)maxHp);
+
+        int level = gameState.getPlayer().getLevel();
+        double exp = gameState.getPlayer().getExperience();
+        int maxExp = gameState.getPlayer().getExperienceForLevelup();
+
+        width = (int)(exp/maxExp * 400);
+        g2d.setColor(Color.GREEN);
+        g2d.fillRect(15, 70, width, 40);
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(15 + width, 70, 400 - width, 40);
+
+        playerExperience.setText("Level: " + level);
+
 
 
         // reset transformation
