@@ -13,6 +13,7 @@ public class Player {
 
     private double experience;
     private int level;
+    private int experienceForLevelup;
 
     private List<Weapon> weapons;
     private int weaponCount;
@@ -22,7 +23,10 @@ public class Player {
     public Player(double hitPoints) {
         this.hitPoints = hitPoints;
         this.maxHitPoints = hitPoints;
-        weapons = new LinkedList<>();
+        this.experience = 0;
+        this.level = 1;
+        this.experienceForLevelup = 20;
+        this.weapons = new LinkedList<>();
 
         for (int i = 0; i < 6; i++) {
             weapons.add(new Weapon(4, 3, 500));
@@ -125,5 +129,14 @@ public class Player {
 
     public void addExperience(int experience) {
         this.experience += experience;
+        if (this.experience >= experienceForLevelup) {
+            level++;
+            this.experience -= experienceForLevelup;
+            experienceForLevelup = (int)(experienceForLevelup * 1.25);
+        }
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

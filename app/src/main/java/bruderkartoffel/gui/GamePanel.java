@@ -21,25 +21,28 @@ public class GamePanel extends JPanel {
 
         this.gameState = gameState;
         this.playerHitPoints = new JLabel();
-        playerHitPoints.setBounds(10, 10, 300, 25);
+        playerHitPoints.setBounds(15, 15, 400, 40);
         playerHitPoints.setBackground(Color.RED);
-        playerHitPoints.setFont(new Font("Bold", Font.BOLD, 18));
+        playerHitPoints.setForeground(Color.WHITE);
+        playerHitPoints.setFont(new Font("Bold", Font.BOLD, 25));
         playerHitPoints.setHorizontalAlignment(SwingConstants.CENTER);
         int hp = (int)gameState.getPlayer().getHitPoints();
         int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
-        playerHitPoints.setText("HP: " + hp + "/" + maxHp);
+        playerHitPoints.setText(hp + "/" + maxHp);
         playerHitPoints.setOpaque(true);
-        playerHitPoints.setBorder(new LineBorder(Color.BLACK, 2));
+        playerHitPoints.setBorder(new LineBorder(Color.BLACK, 4));
 
         playerExperience = new JLabel();
-        playerExperience.setBounds(10, 45, 300, 25);
+        playerExperience.setBounds(15, 70, 400, 40);
         playerExperience.setBackground(Color.GREEN);
-        playerExperience.setFont(new Font("Bold", Font.BOLD, 18));
-        playerExperience.setHorizontalAlignment(SwingConstants.CENTER);
+        playerExperience.setForeground(Color.WHITE);
+        playerExperience.setFont(new Font("Bold", Font.BOLD, 25));
+        playerExperience.setHorizontalAlignment(SwingConstants.RIGHT);
         int exp = (int)gameState.getPlayer().getExperience();
-        playerExperience.setText("Exp: " + exp);
+        int level = gameState.getPlayer().getLevel();
+        playerExperience.setText("Lvl: " + level);
         playerExperience.setOpaque(true);
-        playerExperience.setBorder(new LineBorder(Color.BLACK, 2));
+        playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
 
 
         setLayout(null);
@@ -62,10 +65,10 @@ public class GamePanel extends JPanel {
 
         int hp = (int)gameState.getPlayer().getHitPoints();
         int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
-        playerHitPoints.setText("HP: " + hp + "/" + maxHp);
+        playerHitPoints.setText(hp + "/" + maxHp);
 
-        int exp = (int)gameState.getPlayer().getExperience();
-        playerExperience.setText("Exp: " + exp);
+        int level = gameState.getPlayer().getLevel();
+        playerExperience.setText("Level: " + level);
 
         // draw background
         g2d.setColor(Color.lightGray);
