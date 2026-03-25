@@ -14,6 +14,8 @@ public class Player {
     private List<Weapon> weapons;
     private int weaponCount;
 
+    private int iFrames = 0;
+
     public Player(double hitPoints) {
         this.hitPoints = hitPoints;
         this.maxHitPoints = hitPoints;
@@ -69,6 +71,10 @@ public class Player {
             }
         }
 
+        // reduce iFrames;
+        if (iFrames > 0) {
+            iFrames--;
+        }
     }
 
     public void setPosX(double posX) {
@@ -104,6 +110,9 @@ public class Player {
     }
 
     public void dealDamage(double damage) {
-        this.hitPoints -= damage;
+        if (iFrames == 0) {
+            this.hitPoints -= damage;
+            iFrames = 30;
+        }
     }
 }

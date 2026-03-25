@@ -13,7 +13,6 @@ public class GameState {
 
     private Dimension worldSize;
 
-    private int playerIFrames = 0;
 
     public GameState() {
         this.player = new Player(20);
@@ -67,20 +66,15 @@ public class GameState {
         }
 
         //player-enemy collision
-        if (playerIFrames > 0) {
-            playerIFrames--;
-        } else {
-            playerIFrames = 30; // only allow 2 damage ticks per second
-            for (Enemy e: enemies) {
-                double dx = e.getPosX() - player.getPosX();
-                double dy = e.getPosY() - player.getPosY();
+        for (Enemy e: enemies) {
+            double dx = e.getPosX() - player.getPosX();
+            double dy = e.getPosY() - player.getPosY();
 
-                double distSq = dx * dx + dy * dy;
-                int radiusSum = e.getSize()/2 + player.getSize()/2;
+            double distSq = dx * dx + dy * dy;
+            int radiusSum = e.getSize()/2 + player.getSize()/2;
 
-                if (distSq <= radiusSum * radiusSum) {
-                    player.dealDamage(e.getBaseDamage());
-                }
+            if (distSq <= radiusSum * radiusSum) {
+                player.dealDamage(e.getBaseDamage());
             }
         }
     }

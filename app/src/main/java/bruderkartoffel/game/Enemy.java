@@ -38,7 +38,7 @@ public class Enemy {
                 double dy = posY - other.getPosY();
 
                 double distSq = dx * dx + dy * dy;
-                double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.7;
+                double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.8;
 
                 if (distSq < minDist * minDist && distSq > 0) {
                     double dist = Math.sqrt(distSq);
