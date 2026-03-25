@@ -5,6 +5,7 @@ public class Enemy {
     private double posX, posY;
     private int size = 50;
     private int speed = 250;
+    private int experienceValue;
 
     private double hitPoints;
     private double baseDamage;
@@ -17,9 +18,10 @@ public class Enemy {
     private int blinkFrames = 5;
     private int blinkCycles = 10;
 
-    public Enemy(double hitPoints, double baseDamage) {
+    public Enemy(double hitPoints, double baseDamage, int experienceValue) {
         this.hitPoints = hitPoints;
         this.baseDamage = baseDamage;
+        this.experienceValue = experienceValue;
     }
 
     public void update(GameState gameState, double dt, double playerPosX, double playerPosY) {
@@ -139,5 +141,9 @@ public class Enemy {
 
     public boolean isTargetable() {
         return !spawning && !dead;
+    }
+
+    public int getExperienceValue() {
+        return experienceValue;
     }
 }

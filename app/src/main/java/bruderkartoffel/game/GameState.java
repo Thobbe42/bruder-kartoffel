@@ -52,6 +52,7 @@ public class GameState {
 
         for (Projectile proj: projectiles) {
             for (Enemy e: enemies) {
+                if (e.isDead()) continue;
                 double dx = proj.getPosX() - e.getPosX();
                 double dy = proj.getPosY() - e.getPosY();
 
@@ -61,6 +62,9 @@ public class GameState {
                 if (distSq <= radiusSum * radiusSum) {
                     proj.setDisabled(true);
                     e.dealDamage(proj.getDamage());
+                    if (e.isDead()) {
+                        player.addExperience(e.getExperienceValue());
+                    }
                 }
             }
         }
@@ -128,7 +132,7 @@ public class GameState {
     }
 
     private void spawnEnemyAt(double posX, double posY) {
-        Enemy enemy = new Enemy(10, 1);
+        Enemy enemy = new Enemy(10, 1, 1);
 
         enemy.setPosX(posX);
         enemy.setPosY(posY);

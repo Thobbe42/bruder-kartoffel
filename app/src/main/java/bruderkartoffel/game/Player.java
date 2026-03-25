@@ -11,6 +11,9 @@ public class Player {
     private int speed = 300;
     private double hitPoints, maxHitPoints;
 
+    private double experience;
+    private int level;
+
     private List<Weapon> weapons;
     private int weaponCount;
 
@@ -114,5 +117,13 @@ public class Player {
             this.hitPoints -= damage;
             iFrames = 30;
         }
+    }
+
+    public double getExperience() {
+        return this.experience;
+    }
+
+    public void addExperience(int experience) {
+        this.experience += experience;
     }
 }

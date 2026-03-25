@@ -15,6 +15,7 @@ public class GamePanel extends JPanel {
     private final GameState gameState;
 
     private final JLabel playerHitPoints;
+    private final JLabel playerExperience;
 
     public GamePanel(GameState gameState) {
 
@@ -30,8 +31,20 @@ public class GamePanel extends JPanel {
         playerHitPoints.setOpaque(true);
         playerHitPoints.setBorder(new LineBorder(Color.BLACK, 2));
 
+        playerExperience = new JLabel();
+        playerExperience.setBounds(10, 45, 300, 25);
+        playerExperience.setBackground(Color.GREEN);
+        playerExperience.setFont(new Font("Bold", Font.BOLD, 18));
+        playerExperience.setHorizontalAlignment(SwingConstants.CENTER);
+        int exp = (int)gameState.getPlayer().getExperience();
+        playerExperience.setText("Exp: " + exp);
+        playerExperience.setOpaque(true);
+        playerExperience.setBorder(new LineBorder(Color.BLACK, 2));
+
+
         setLayout(null);
         add(playerHitPoints);
+        add(playerExperience);
 
         KeyHandler kh = new KeyHandler(gameState);
         addKeyListener(kh);
@@ -44,11 +57,15 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+
         Graphics2D g2d = (Graphics2D)g;
 
         int hp = (int)gameState.getPlayer().getHitPoints();
         int maxHp = (int)gameState.getPlayer().getMaxHitPoints();
         playerHitPoints.setText("HP: " + hp + "/" + maxHp);
+
+        int exp = (int)gameState.getPlayer().getExperience();
+        playerExperience.setText("Exp: " + exp);
 
         // draw background
         g2d.setColor(Color.lightGray);
@@ -63,8 +80,8 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.BLACK);
         g2d.drawOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
-        // draw enemies
 
+        // draw enemies
         List<Enemy> enemiesSnapshot;
 
         synchronized (gameState.getEnemies()) {
