@@ -3,7 +3,6 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.*;
 
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -183,7 +182,7 @@ public class GamePanel extends JPanel {
 
         int level = gameState.getPlayer().getLevel();
         double exp = gameState.getPlayer().getExperience();
-        int maxExp = gameState.getPlayer().getExperienceForLevelup();
+        int maxExp = gameState.getPlayer().getExperienceForLevel();
 
         width = (int)(exp/maxExp * 400);
         g2d.setColor(Color.GREEN);
@@ -191,7 +190,7 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.GRAY);
         g2d.fillRect(15 + width, 70, 400 - width, 40);
 
-        playerExperience.setText("Level: " + level);
+        playerExperience.setText("Lvl. " + level);
 
 
 
