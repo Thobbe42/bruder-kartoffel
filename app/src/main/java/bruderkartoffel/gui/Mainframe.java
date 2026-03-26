@@ -40,7 +40,9 @@ public class Mainframe extends JFrame {
                 if (!started) {
                     started = true;
 
-                    gameState.setWorldSize(gamePanel.getSize());
+                    Dimension screen = gamePanel.getSize();
+                    Dimension world = new Dimension((int)(screen.width * 1.3), (int)(screen.height * 1.3));
+                    gameState.setWorldSize(world, screen);
 
                     Thread gameThread = new Thread(new GameClock(gameState, gamePanel));
                     gameThread.start();

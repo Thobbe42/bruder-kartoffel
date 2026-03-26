@@ -12,6 +12,9 @@ public class GameState {
     private List<Enemy> enemies;
 
     private Dimension worldSize;
+    private Dimension screenSize;
+
+    private Point camera;
 
 
     public GameState() {
@@ -20,8 +23,10 @@ public class GameState {
     }
 
 
-    public void setWorldSize(Dimension worldSize) {
+    public void setWorldSize(Dimension worldSize, Dimension screenSize) {
         this.worldSize = worldSize;
+        this.screenSize = screenSize;
+        this.camera = new Point(screenSize.width/2, screenSize.height/2);
 
         player.setPosX(worldSize.getWidth()/2);
         player.setPosY(worldSize.getHeight()/2);
@@ -39,6 +44,15 @@ public class GameState {
         for (Enemy e: enemies) {
             e.update(this, delta, player.getPosX(), player.getPosY());
         }
+    }
+
+
+    public void updateCamera() {
+        int targetX = (int)(player.getPosX() - screenSize.getWidth() / 2.0);
+        int targetY = (int)(player.getPosY() - screenSize.getHeight() / 2.0);
+
+        camera.x = Math.max(0, Math.min(targetX, worldSize.width - screenSize.width));
+        camera.y = Math.max(0, Math.min(targetY, worldSize.height - screenSize.height));
     }
 
 
@@ -146,5 +160,13 @@ public class GameState {
 
     public List<Enemy> getEnemies() {
         return enemies;
+    }
+
+    public Dimension getWorldSize() {
+        return this.worldSize;
+    }
+
+    public Point getCamera() {
+        return this.camera;
     }
 }

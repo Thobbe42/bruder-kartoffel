@@ -39,6 +39,7 @@ public class GameClock implements Runnable{
                 gameState.update(dt);
                 gameState.handleCollisions();
                 gamePanel.repaint();
+                gameState.updateCamera();
                 Toolkit.getDefaultToolkit().sync();
                 delta--;
                 lastDraw = currentTime;

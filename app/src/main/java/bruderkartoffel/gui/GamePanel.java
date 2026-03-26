@@ -57,10 +57,20 @@ public class GamePanel extends JPanel {
 
 
         Graphics2D g2d = (Graphics2D)g;
+        AffineTransform old = g2d.getTransform();
 
         // draw background
         g2d.setColor(Color.lightGray);
         g2d.fillRect(0,0,getWidth(), getHeight());
+
+        // apply camera
+        Point camera = gameState.getCamera();
+        g2d.translate(-camera.x, -camera.y);
+
+
+        // draw border
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(0, 0, (int)(gameState.getWorldSize().width * 0.95), (int)(gameState.getWorldSize().height * 0.95));
 
 
         // draw player
@@ -100,7 +110,6 @@ public class GamePanel extends JPanel {
         }
 
         // draw weapons
-        AffineTransform old = g2d.getTransform();
 
         for (Weapon weapon : p.getWeapons()) {
 
@@ -138,6 +147,8 @@ public class GamePanel extends JPanel {
                 }
             }
 
+            AffineTransform beforeWeapon = g2d.getTransform();
+
             // weapon transformation
             g2d.translate(worldX, worldY);
             g2d.rotate(weapon.getAngle());
@@ -145,7 +156,7 @@ public class GamePanel extends JPanel {
             g2d.setColor(Color.BLACK);
             g2d.fillRect(-15, -5, 30, 10);
 
-            g2d.setTransform(old);
+            g2d.setTransform(beforeWeapon);
 
             g2d.setColor(Color.GREEN);
             g2d.fillOval((int)worldX - 3, (int)worldY - 3, 6, 6);
@@ -165,6 +176,10 @@ public class GamePanel extends JPanel {
         int protRadius = gameState.getPlayer().getSize() * 3;
         g2d.setColor(Color.CYAN);
         g2d.drawOval((int)gameState.getPlayer().getPosX() - protRadius, (int)gameState.getPlayer().getPosY() - protRadius, protRadius*2, protRadius*2);
+
+
+        // reset transformation
+        g2d.setTransform(old);
 
 
 
@@ -192,9 +207,5 @@ public class GamePanel extends JPanel {
 
         playerExperience.setText("Lvl. " + level);
 
-
-
-        // reset transformation
-        g2d.setTransform(old);
     }
 }
