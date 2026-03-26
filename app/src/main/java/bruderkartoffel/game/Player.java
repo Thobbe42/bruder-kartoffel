@@ -51,8 +51,16 @@ public class Player {
             dy /= length;
         }
 
-        posX += dx * speed * delta;
-        posY += dy * speed * delta;
+        double targetX = posX + dx * speed * delta;
+        double targetY = posY + dy * speed * delta;
+
+        if (targetX < size/2.0) targetX = size/2.0;
+        if (targetX > gameState.getWorldSize().width - size/2.0) targetX = gameState.getWorldSize().width - size/2.0;
+        if (targetY < size/2.0) targetY = size/2.0;
+        if (targetY > gameState.getWorldSize().height - size/2.0) targetY = gameState.getWorldSize().height - size/2.0;
+
+        posX = targetX;
+        posY = targetY;
 
         // calculate relative weapon positions
         if (weaponCount > 0) {
