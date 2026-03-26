@@ -53,11 +53,12 @@ public class Player {
 
         double targetX = posX + dx * speed * delta;
         double targetY = posY + dy * speed * delta;
+        int border = (gameState.getWorldSize().width - gameState.getMapSize().width)/2;
 
-        if (targetX < size/2.0) targetX = size/2.0;
-        if (targetX > gameState.getWorldSize().width - size/2.0) targetX = gameState.getWorldSize().width - size/2.0;
-        if (targetY < size/2.0) targetY = size/2.0;
-        if (targetY > gameState.getWorldSize().height - size/2.0) targetY = gameState.getWorldSize().height - size/2.0;
+        if (targetX < size/2.0 + border) targetX = size/2.0 + border;
+        if (targetX > gameState.getWorldSize().width - border - size/2.0) targetX = gameState.getWorldSize().width - border - size/2.0;
+        if (targetY < size/2.0 + border) targetY = size/2.0 + border;
+        if (targetY > gameState.getWorldSize().height - border - size/2.0) targetY = gameState.getWorldSize().height - border - size/2.0;
 
         posX = targetX;
         posY = targetY;

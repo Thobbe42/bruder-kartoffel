@@ -13,6 +13,7 @@ public class GameState {
 
     private Dimension worldSize;
     private Dimension screenSize;
+    private Dimension mapSize;
 
     private Point camera;
 
@@ -26,6 +27,7 @@ public class GameState {
     public void setWorldSize(Dimension worldSize, Dimension screenSize) {
         this.worldSize = worldSize;
         this.screenSize = screenSize;
+        this.mapSize = new Dimension(worldSize.width - 300, worldSize.height - 300);
         this.camera = new Point(screenSize.width/2, screenSize.height/2);
 
         player.setPosX(worldSize.getWidth()/2);
@@ -122,9 +124,10 @@ public class GameState {
         int radius = 50 + (amount * 4);
         double dist;
 
+        int border = (worldSize.width - mapSize.width)/2;
         do {
-            baseX = Math.random() * worldSize.getWidth();
-            baseY = Math.random() * worldSize.getHeight();
+            baseX = Math.random() * mapSize.getWidth() + border;
+            baseY = Math.random() * mapSize.getHeight() + border;
 
             double dx = player.getPosX() - baseX;
             double dy = player.getPosY() - baseY;
@@ -164,6 +167,10 @@ public class GameState {
 
     public Dimension getWorldSize() {
         return this.worldSize;
+    }
+
+    public Dimension getMapSize() {
+        return this.mapSize;
     }
 
     public Point getCamera() {

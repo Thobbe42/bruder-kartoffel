@@ -70,7 +70,11 @@ public class GamePanel extends JPanel {
 
         // draw border
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, (int)(gameState.getWorldSize().width * 0.95), (int)(gameState.getWorldSize().height * 0.95));
+        int border = 150;
+        g2d.drawRect(border,
+                border,
+                (int)(gameState.getMapSize().width),
+                (int)(gameState.getMapSize().height));
 
 
         // draw player

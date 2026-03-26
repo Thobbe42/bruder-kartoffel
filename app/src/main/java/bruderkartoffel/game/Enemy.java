@@ -49,7 +49,7 @@ public class Enemy {
                     dx /= dist;
                     dy /= dist;
 
-                    // push strength (stronger when closer)
+                    // push strength
                     double strength = (minDist - dist);
 
                     sepX += dx * strength;
@@ -62,7 +62,7 @@ public class Enemy {
                 sepX /= count;
                 sepY /= count;
 
-                posX += sepX * 0.1; // tweak factor
+                posX += sepX * 0.1;
                 posY += sepY * 0.1;
             }
 

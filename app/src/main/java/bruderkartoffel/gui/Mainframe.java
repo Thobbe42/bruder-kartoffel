@@ -27,7 +27,6 @@ public class Mainframe extends JFrame {
         initKeyHandling();
 
         // add content
-        Dimension size = new Dimension(1920, 1080);
         gameState = new GameState();
         gamePanel = new GamePanel(gameState);
         add(gamePanel, BorderLayout.CENTER);
@@ -41,7 +40,7 @@ public class Mainframe extends JFrame {
                     started = true;
 
                     Dimension screen = gamePanel.getSize();
-                    Dimension world = new Dimension((int)(screen.width * 1.3), (int)(screen.height * 1.3));
+                    Dimension world = new Dimension((int)(screen.width * 1.6), (int)(screen.height * 1.6));
                     gameState.setWorldSize(world, screen);
 
                     Thread gameThread = new Thread(new GameClock(gameState, gamePanel));
