@@ -21,6 +21,7 @@ public class GameState {
     public GameState() {
         this.player = new Player(20);
         this.enemies = new LinkedList<>();
+        camera = new Point(0, 0);
     }
 
 
@@ -126,8 +127,8 @@ public class GameState {
 
         int border = (worldSize.width - mapSize.width)/2;
         do {
-            baseX = Math.random() * mapSize.getWidth() + border;
-            baseY = Math.random() * mapSize.getHeight() + border;
+            baseX = Math.random() * (mapSize.getWidth() - 2 * radius) + border + radius;
+            baseY = Math.random() * (mapSize.getHeight() - 2 * radius) + border + radius;
 
             double dx = player.getPosX() - baseX;
             double dy = player.getPosY() - baseY;
