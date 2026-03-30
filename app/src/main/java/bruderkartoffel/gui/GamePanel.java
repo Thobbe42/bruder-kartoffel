@@ -55,6 +55,9 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        if (getWidth() <= 0 || getHeight() <= 0) {
+            return;
+        }
 
         Graphics2D g2d = (Graphics2D)g;
         AffineTransform old = g2d.getTransform();
@@ -65,7 +68,7 @@ public class GamePanel extends JPanel {
 
         // apply camera
         Point camera = gameState.getCamera();
-        g2d.translate(-camera.x, -camera.y);
+        g2d.translate(-camera.x + getWidth()/2, -camera.y + getHeight()/2);
 
 
         // draw border

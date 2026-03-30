@@ -12,33 +12,41 @@ public class GameState {
     private List<Enemy> enemies;
 
     private Dimension worldSize;
-    private Dimension screenSize;
     private Dimension mapSize;
 
     private Point camera;
 
 
+    /**
+     * Creates a new GameState with default values.
+     * Default values are 20 player HP and a 2500x2500 World.
+     */
     public GameState() {
         this.player = new Player(20);
         this.enemies = new LinkedList<>();
-        camera = new Point(0, 0);
+
+        // default world setup
+        this.worldSize = new Dimension(2500, 2500);
+        this.mapSize = new Dimension(worldSize.width - 300, worldSize.height - 300);
+        this.camera = new Point(worldSize.width/2, worldSize.height/2);
+
+        this.player.setPosX(worldSize.getWidth()/2);
+        this.player.setPosY(worldSize.getHeight()/2);
     }
 
-
-    public void setWorldSize(Dimension worldSize, Dimension screenSize) {
+    /**
+     * Set the world size to a dedicated dimension different from the default.
+     * Can be used to override map size for specific cases.
+     *
+     * @param worldSize The Dimension of the world for this GameState.
+     */
+    public void setWorldSize(Dimension worldSize) {
         this.worldSize = worldSize;
-        this.screenSize = screenSize;
         this.mapSize = new Dimension(worldSize.width - 300, worldSize.height - 300);
-        this.camera = new Point(screenSize.width/2, screenSize.height/2);
+        this.camera = new Point(worldSize.width/2, worldSize.height/2);
 
         player.setPosX(worldSize.getWidth()/2);
         player.setPosY(worldSize.getHeight()/2);
-
-
-        // spawn 4 enemies for testing
-        for (int i = 0; i < 4; i++) {
-            spawnEnemy();
-        }
     }
 
     public void update(double delta) {
@@ -50,12 +58,20 @@ public class GameState {
     }
 
 
-    public void updateCamera() {
-        int targetX = (int)(player.getPosX() - screenSize.getWidth() / 2.0);
-        int targetY = (int)(player.getPosY() - screenSize.getHeight() / 2.0);
+    public void updateCamera(Dimension screenSize) {
 
-        camera.x = Math.max(0, Math.min(targetX, worldSize.width - screenSize.width));
-        camera.y = Math.max(0, Math.min(targetY, worldSize.height - screenSize.height));
+        camera.x = (int)player.getPosX();
+        camera.y = (int)player.getPosY();
+
+        if (screenSize.width <= 0 || screenSize.height <= 0) {
+            return;
+        }
+
+        double halfW = screenSize.getWidth() / 2.0;
+        double halfH = screenSize.getHeight() / 2.0;
+
+        camera.x = (int)Math.max(halfW, Math.min(camera.x, worldSize.width - halfW));
+        camera.y = (int)Math.max(halfH, Math.min(camera.y, worldSize.height - halfH));
     }
 
 

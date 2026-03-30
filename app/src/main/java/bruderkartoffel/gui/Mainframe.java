@@ -26,31 +26,16 @@ public class Mainframe extends JFrame {
         // init global keys
         initKeyHandling();
 
-        // add content
+        // initialize GameState, GamePanel, and Clock
         gameState = new GameState();
         gamePanel = new GamePanel(gameState);
+        GameClock clock = new GameClock(gameState, gamePanel);
         add(gamePanel, BorderLayout.CENTER);
-
-        gamePanel.addComponentListener(new ComponentAdapter() {
-            private boolean started = false;
-
-            @Override
-            public void componentResized(ComponentEvent e) {
-                if (!started) {
-                    started = true;
-
-                    Dimension screen = gamePanel.getSize();
-                    Dimension world = new Dimension((int)(screen.width * 1.6), (int)(screen.height * 1.6));
-                    gameState.setWorldSize(world, screen);
-
-                    Thread gameThread = new Thread(new GameClock(gameState, gamePanel));
-                    gameThread.start();
-                }
-            }
-        });
 
         setExtendedState(MAXIMIZED_BOTH);
 
+        Thread clockThread = new Thread(clock);
+        clockThread.start();
         setVisible(true);
     }
 

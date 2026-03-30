@@ -37,9 +37,9 @@ public class GameClock implements Runnable{
             if (delta >= 1) {
                 double dt = (currentTime - lastDraw) / 1_000_000_000.0;
                 gameState.update(dt);
+                gameState.updateCamera(gamePanel.getSize());
                 gameState.handleCollisions();
                 gamePanel.repaint();
-                gameState.updateCamera();
                 Toolkit.getDefaultToolkit().sync();
                 delta--;
                 lastDraw = currentTime;
