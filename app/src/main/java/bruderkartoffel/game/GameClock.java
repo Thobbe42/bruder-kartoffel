@@ -11,9 +11,12 @@ public class GameClock implements Runnable{
     private final GameState gameState;
     private final GamePanel gamePanel;
 
+    private volatile boolean running;
+
     public GameClock(GameState gameState, GamePanel gamePanel) {
         this.gameState = gameState;
         this.gamePanel = gamePanel;
+        this.running = true;
     }
 
     @Override
@@ -26,8 +29,8 @@ public class GameClock implements Runnable{
         long lastDraw = System.nanoTime();
 
 
-        while(true) {
-
+        while(running) {
+            System.out.println(running);
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
@@ -44,5 +47,9 @@ public class GameClock implements Runnable{
             }
 
         }
+    }
+
+    public void stop() {
+        this.running = false;
     }
 }
