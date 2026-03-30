@@ -14,6 +14,8 @@ public class Mainframe extends JFrame {
 
     private GamePanel gamePanel;
     private GameState gameState;
+    private GameClock clock;
+    private Thread clockThread;
 
     public Mainframe() {
         // basic metadata
@@ -29,12 +31,12 @@ public class Mainframe extends JFrame {
         // initialize GameState, GamePanel, and Clock
         gameState = new GameState();
         gamePanel = new GamePanel(gameState);
-        GameClock clock = new GameClock(gameState, gamePanel);
+        clock = new GameClock(gameState, gamePanel);
         add(gamePanel, BorderLayout.CENTER);
 
         setExtendedState(MAXIMIZED_BOTH);
 
-        Thread clockThread = new Thread(clock);
+        clockThread = new Thread(clock);
         clockThread.start();
         setVisible(true);
     }
@@ -50,7 +52,15 @@ public class Mainframe extends JFrame {
 
         am.put("exit", new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                System.exit(0);
+                new Thread(() -> {
+                    clock.stop();
+                    try {
+                        clockThread.join();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    System.exit(0);
+                }).start();
             }
         });
     }

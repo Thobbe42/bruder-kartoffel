@@ -30,7 +30,6 @@ public class GameClock implements Runnable{
 
 
         while(running) {
-            System.out.println(running);
             currentTime = System.nanoTime();
 
             delta += (currentTime - lastTime) / drawInterval;
@@ -41,10 +40,16 @@ public class GameClock implements Runnable{
                 double dt = (currentTime - lastDraw) / 1_000_000_000.0;
                 gameState.update(dt, gamePanel.getSize());
                 gamePanel.repaint();
-                Toolkit.getDefaultToolkit().sync();
+                //Toolkit.getDefaultToolkit().sync();
                 delta--;
                 lastDraw = currentTime;
+            } else {
+            try {
+                Thread.sleep(1); // 🔥 critical
+            } catch (InterruptedException e) {
+                break;
             }
+        }
 
         }
     }
