@@ -13,7 +13,7 @@ public class Player {
 
     private double experience;
     private int level;
-    private int experienceForLevelup;
+    private int experienceForLevelUp;
 
     private List<Weapon> weapons;
     private int weaponCount;
@@ -125,7 +125,7 @@ public class Player {
         return maxHitPoints;
     }
 
-    public void dealDamage(double damage) {
+    public void takeDamage(double damage) {
         if (iFrames == 0) {
             this.hitPoints -= damage;
             iFrames = 30;
@@ -137,20 +137,20 @@ public class Player {
     }
 
     public int getExperienceForLevel() {
-        return experienceForLevelup;
+        return experienceForLevelUp;
     }
 
     public void addExperience(int experience) {
         this.experience += experience;
-        if (this.experience >= experienceForLevelup) {
+        if (this.experience >= experienceForLevelUp) {
             level++;
-            this.experience -= experienceForLevelup;
+            this.experience -= experienceForLevelUp;
             nextExperienceRequirement();
         }
     }
 
     private void nextExperienceRequirement() {
-        this.experienceForLevelup = (level + 3) * (level + 3);
+        this.experienceForLevelUp = (level + 3) * (level + 3);
     }
 
     public int getLevel() {

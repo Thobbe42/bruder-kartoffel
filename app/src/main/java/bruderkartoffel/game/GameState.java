@@ -6,6 +6,11 @@ import java.util.List;
 
 public class GameState {
 
+
+    public enum Phase{
+        INIT, WAVE, SHOP
+    }
+
     public boolean up, left, down, right;
 
     private Player player;
@@ -16,12 +21,16 @@ public class GameState {
 
     private Point camera;
 
+    private Phase phase;
 
     /**
      * Creates a new GameState with default values.
      * Default values are 20 player HP and a 2500x2500 World.
      */
     public GameState() {
+
+        this.phase = Phase.INIT;
+
         this.player = new Player(20);
         this.enemies = new LinkedList<>();
 
@@ -49,15 +58,46 @@ public class GameState {
         player.setPosY(worldSize.getHeight()/2);
     }
 
-    public void update(double delta) {
-        player.update(this, delta);
-        enemies.removeIf(Enemy::isDead);
-        for (Enemy e: enemies) {
-            e.update(this, delta, player.getPosX(), player.getPosY());
+    /**
+     * Updates the gameState for the next frame based on inputs and movemnts/collisions.
+     *
+     * @param dt The exact time passed since the last frame to account for fluctuations
+     *              in framerate.
+     * @param screenSize The Dimensions of the GamePanel Object, to correctly update the
+     *                   camera position.
+     */
+    public void update(double dt, Dimension screenSize) {
+
+        switch (phase) {
+            case INIT -> updateInit(screenSize);
+            case WAVE -> updateWave(dt, screenSize);
         }
     }
 
+    private void updateInit(Dimension screenSize) {
+        if (screenSize.width != 0 && screenSize.height != 0) {
+            updateCamera(screenSize);
+            phase = Phase.WAVE;
+        }
+    }
 
+    private void updateWave(double dt, Dimension screenSize) {
+        player.update(this, dt);
+        enemies.removeIf(Enemy::isDead);
+        for (Enemy e: enemies) {
+            e.update(this, dt, player.getPosX(), player.getPosY());
+        }
+        updateCamera(screenSize);
+        handleCollisions();
+
+    }
+
+    /**
+     * Updates the camera by moving it to the player position and clamping it to the
+     * border of the map.
+     *
+     * @param screenSize The Dimension of the GamePanel object for correct clamping.
+     */
     public void updateCamera(Dimension screenSize) {
 
         camera.x = (int)player.getPosX();
@@ -74,7 +114,12 @@ public class GameState {
         camera.y = (int)Math.max(halfH, Math.min(camera.y, worldSize.height - halfH));
     }
 
-
+    /**
+     * Handles all the possible collisions occurring in one frame.
+     * Checks for collision of projectiles with hittable targets, handles
+     * disabling of projectiles, and checks collisions of enemies with the
+     * player.
+     */
     public void handleCollisions() {
 
         // projectile-enemy collision
@@ -84,8 +129,11 @@ public class GameState {
         }
 
         for (Projectile proj: projectiles) {
+            if (proj.isDisabled()) continue; // avoid infinite piercing within a single frame
+
             for (Enemy e: enemies) {
-                if (e.isDead()) continue;
+                if (e.isDead()) continue; // no collision with dead or spawning targets
+
                 double dx = proj.getPosX() - e.getPosX();
                 double dy = proj.getPosY() - e.getPosY();
 
@@ -104,6 +152,8 @@ public class GameState {
 
         //player-enemy collision
         for (Enemy e: enemies) {
+            if (e.isDead()) continue; // avoid hits by enemies that died in the same frame
+
             double dx = e.getPosX() - player.getPosX();
             double dy = e.getPosY() - player.getPosY();
 
@@ -111,13 +161,15 @@ public class GameState {
             int radiusSum = e.getSize()/2 + player.getSize()/2;
 
             if (distSq <= radiusSum * radiusSum) {
-                player.dealDamage(e.getBaseDamage());
+                player.takeDamage(e.getBaseDamage());
             }
         }
     }
 
 
-
+    /**
+     * Spawns a single enemy at a random location outside the players protective radius.
+     */
     public void spawnEnemy() {
         int protectedRadius = player.getSize() * 3;
         double posX, posY, dist;
@@ -135,6 +187,12 @@ public class GameState {
         spawnEnemyAt(posX, posY);
     }
 
+    /**
+     * Spawns a specified amount of enemies in a cluster.
+     * Enemies spawn in a close group, outside the players protective radius.
+     *
+     * @param amount The number of enemies to be spawned in the batch.
+     */
     public void spawnEnemyBatch(int amount) {
         double baseX, baseY;
         int protectedRadius = player.getSize() * 3;

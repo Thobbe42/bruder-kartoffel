@@ -76,8 +76,9 @@ public class GamePanel extends JPanel {
         int border = 150;
         g2d.drawRect(border,
                 border,
-                (int)(gameState.getMapSize().width),
-                (int)(gameState.getMapSize().height));
+                gameState.getMapSize().width,
+                gameState.getMapSize().height
+        );
 
 
         // draw player
@@ -86,6 +87,7 @@ public class GamePanel extends JPanel {
         int size = p.getSize();
         int radius = size/2;
         g2d.fillOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
+        // player border
         g2d.setColor(Color.BLACK);
         g2d.drawOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
@@ -103,6 +105,8 @@ public class GamePanel extends JPanel {
                 size = e.getSize();
                 radius = size / 2;
                 g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+
+                // enemy border
                 g2d.setColor(Color.BLACK);
                 g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
             } else {
@@ -117,7 +121,6 @@ public class GamePanel extends JPanel {
         }
 
         // draw weapons
-
         for (Weapon weapon : p.getWeapons()) {
 
             double worldX = p.getPosX() + weapon.getPosX();
@@ -179,7 +182,7 @@ public class GamePanel extends JPanel {
             }
         }
 
-        // player protective cirle
+        // player protective circle
         int protRadius = gameState.getPlayer().getSize() * 3;
         g2d.setColor(Color.CYAN);
         g2d.drawOval((int)gameState.getPlayer().getPosX() - protRadius, (int)gameState.getPlayer().getPosY() - protRadius, protRadius*2, protRadius*2);
@@ -213,6 +216,5 @@ public class GamePanel extends JPanel {
         g2d.fillRect(15 + width, 70, 400 - width, 40);
 
         playerExperience.setText("Lvl. " + level);
-
     }
 }
