@@ -29,6 +29,7 @@ public class KeyHandler implements KeyListener {
             case KeyEvent.VK_S -> gameState.down = true;
             case KeyEvent.VK_D -> gameState.right = true;
             case KeyEvent.VK_SPACE -> gamePanel.toggleDebug();
+            case KeyEvent.VK_ENTER -> gameState.getWaveHandler().nextWave();
         }
     }
 

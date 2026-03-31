@@ -79,7 +79,7 @@ public class GameState {
     private void updateInit(Dimension screenSize) {
         if (screenSize.width != 0 && screenSize.height != 0) {
             updateCamera(screenSize);
-            phase = Phase.WAVE;
+            waveHandler.nextWave();
         }
     }
 
@@ -256,5 +256,13 @@ public class GameState {
 
     public void setPhase(Phase phase) {
         this.phase = phase;
+    }
+
+    public Phase getPhase() {
+        return this.phase;
+    }
+
+    public WaveHandler getWaveHandler() {
+        return this.waveHandler;
     }
 }

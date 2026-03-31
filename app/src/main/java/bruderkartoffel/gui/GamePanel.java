@@ -15,12 +15,15 @@ public class GamePanel extends JPanel {
 
     private final JLabel playerHitPoints;
     private final JLabel playerExperience;
+    private final JLabel waveDisplay;
 
     private boolean debug = false;
 
     public GamePanel(GameState gameState) {
 
         this.gameState = gameState;
+
+
         this.playerHitPoints = new JLabel();
         playerHitPoints.setBounds(15, 15, 400, 40);
         playerHitPoints.setForeground(Color.WHITE);
@@ -42,9 +45,16 @@ public class GamePanel extends JPanel {
         playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
 
 
+        this.waveDisplay = new JLabel();
+        waveDisplay.setBounds(getWidth()/2 - 200, 40, 400, 40);
+        waveDisplay.setForeground(Color.WHITE);
+        waveDisplay.setFont(new Font("Bold", Font.BOLD, 25));
+        waveDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+
         setLayout(null);
         add(playerHitPoints);
         add(playerExperience);
+        add(waveDisplay);
 
         KeyHandler kh = new KeyHandler(gameState, this);
         addKeyListener(kh);
@@ -59,6 +69,11 @@ public class GamePanel extends JPanel {
 
         if (getWidth() <= 0 || getHeight() <= 0) {
             return;
+        }
+
+        // one-time override of wave display bounds
+        if (waveDisplay.getBounds().x != (getWidth()/2 - 200)) {
+            waveDisplay.setBounds(getWidth()/2 - 200, 40, 400, 40);
         }
 
         Graphics2D g2d = (Graphics2D)g;
@@ -201,13 +216,12 @@ public class GamePanel extends JPanel {
 
 
 
-
         // reset transformation
         g2d.setTransform(old);
 
 
-
-        // draw hp/exp indicators
+    // draw static ui elements
+        // player hit points
         double hp = gameState.getPlayer().getHitPoints();
         double maxHp = gameState.getPlayer().getMaxHitPoints();
 
@@ -219,6 +233,7 @@ public class GamePanel extends JPanel {
 
         playerHitPoints.setText((int)hp + "/" + (int)maxHp);
 
+        // player experience
         int level = gameState.getPlayer().getLevel();
         double exp = gameState.getPlayer().getExperience();
         int maxExp = gameState.getPlayer().getExperienceForLevel();
@@ -230,6 +245,14 @@ public class GamePanel extends JPanel {
         g2d.fillRect(15 + width, 70, 400 - width, 40);
 
         playerExperience.setText("Lvl. " + level);
+
+        // wave number and timer
+        WaveHandler handler = gameState.getWaveHandler();
+        int wave = handler.getWave();
+        int timer = (int)handler.getTimer();
+
+        waveDisplay.setText("Wave " + wave + " - " + timer);
+
     }
 
     public void toggleDebug() {

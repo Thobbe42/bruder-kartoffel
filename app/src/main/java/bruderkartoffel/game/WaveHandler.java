@@ -12,7 +12,7 @@ public class WaveHandler {
         this.gameState = gameState;
 
         this.wave = 0;
-        this.duration = 20;
+        this.duration = 5;
         this.timer = duration;
     }
 
@@ -24,6 +24,8 @@ public class WaveHandler {
     }
 
     public void nextWave() {
+        if (gameState.getPhase() == GameState.Phase.WAVE) return;
+
         this.wave += 1;
         this.duration = (duration < 60) ? (duration + 5) : 60;
         this.timer = duration;
