@@ -128,8 +128,17 @@ public class Player {
     public void takeDamage(double damage) {
         if (iFrames == 0) {
             this.hitPoints -= damage;
-            iFrames = 30;
+            iFrames = calculateIFrames(damage);
         }
+    }
+
+    private int calculateIFrames(double damage) {
+        // 0.4 * damage% / 15%
+        double damagePercentTaken = damage/maxHitPoints * 100;
+        double time = 0.4 * (damagePercentTaken/15);
+        double invulnerabilityTime = Math.max(0.2, Math.min(0.4, time));
+
+        return (int)(invulnerabilityTime * 60);
     }
 
     public double getExperience() {
