@@ -23,6 +23,8 @@ public class GameState {
 
     private Phase phase;
 
+    private WaveHandler waveHandler;
+
     /**
      * Creates a new GameState with default values.
      * Default values are 20 player HP and a 2500x2500 World.
@@ -30,6 +32,7 @@ public class GameState {
     public GameState() {
 
         this.phase = Phase.INIT;
+        this.waveHandler = new WaveHandler(this);
 
         this.player = new Player(20);
         this.enemies = new LinkedList<>();
@@ -67,7 +70,6 @@ public class GameState {
      *                   camera position.
      */
     public void update(double dt, Dimension screenSize) {
-
         switch (phase) {
             case INIT -> updateInit(screenSize);
             case WAVE -> updateWave(dt, screenSize);
@@ -89,7 +91,7 @@ public class GameState {
         }
         updateCamera(screenSize);
         handleCollisions();
-
+        waveHandler.update(dt);
     }
 
     /**
@@ -250,5 +252,9 @@ public class GameState {
 
     public Point getCamera() {
         return this.camera;
+    }
+
+    public void setPhase(Phase phase) {
+        this.phase = phase;
     }
 }
