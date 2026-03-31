@@ -40,7 +40,7 @@ public class GameClock implements Runnable{
                 double dt = (currentTime - lastDraw) / 1_000_000_000.0;
                 gameState.update(dt, gamePanel.getSize());
                 gamePanel.repaint();
-                //Toolkit.getDefaultToolkit().sync();
+                Toolkit.getDefaultToolkit().sync();
                 delta--;
                 lastDraw = currentTime;
             } else {
