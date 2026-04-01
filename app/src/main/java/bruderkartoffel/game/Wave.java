@@ -4,15 +4,15 @@ import java.util.List;
 
 public class Wave {
 
-    private int duration;
+    private double duration;
     private List<WaveEvent> waveEvents;
 
-    public Wave(int duration, List<WaveEvent> waveEvents) {
+    public Wave(double duration, List<WaveEvent> waveEvents) {
         this.duration = duration;
         this.waveEvents = waveEvents;
     }
 
-    public int getDuration() {
+    public double getDuration() {
         return duration;
     }
 

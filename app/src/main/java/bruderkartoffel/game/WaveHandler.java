@@ -13,30 +13,46 @@ public class WaveHandler {
 
 
     private List<Wave> waveConfigs = List.of(
-            new Wave(20,
-                    List.of(
-                            new WaveEvent(0, 3),
-                            new WaveEvent(0, 1),
-                            new WaveEvent(5, 3),
-                            new WaveEvent(5, 1),
-                            new WaveEvent(10, 3),
-                            new WaveEvent(10, 1),
-                            new WaveEvent(15, 3),
-                            new WaveEvent(15, 1)
-                    )),
-            new Wave(25,
-                    List.of(
-                            new WaveEvent(0, 3),
-                            new WaveEvent(0, 2),
-                            new WaveEvent(5, 3),
-                            new WaveEvent(5, 2),
-                            new WaveEvent(10, 3),
-                            new WaveEvent(10, 2),
-                            new WaveEvent(15, 3),
-                            new WaveEvent(15, 2),
-                            new WaveEvent(20, 3),
-                            new WaveEvent(20, 2)
-                    ))
+            new WaveBuilder(20)
+                    .spawnGroup(0, 2)
+                    .spawnGroup(5, 2)
+                    .spawnGroup(10, 3)
+                    .spawnGroup(15, 3)
+                    .build(),
+            new WaveBuilder(25)
+                    .spawnGroup(0, 3)
+                    .spawnGroup(5, 3)
+                    .spawnGroup(10, 4)
+                    .spawnGroup(15, 4)
+                    .spawnGroup(20, 5)
+                    .build(),
+            new WaveBuilder(30)
+                    .spawnGroup(0, 3, 1)
+                    .spawnGroup(5, 4)
+                    .spawnGroup(10, 5)
+                    .spawnGroup(15, 5, 1)
+                    .spawnGroup(20, 6)
+                    .spawnGroup(25, 6)
+                    .build(),
+            new WaveBuilder(35)
+                    .spawnGroup(0, 4, 1)
+                    .spawnGroup(5, 5)
+                    .spawnGroup(10, 6)
+                    .spawnGroup(15, 6, 2)
+                    .spawnGroup(20, 7)
+                    .spawnGroup(25, 7)
+                    .spawnGroup(30, 8)
+                    .build(),
+            new WaveBuilder(40)
+                    .spawnGroup(0, 5, 2)
+                    .spawnGroup(5, 6)
+                    .spawnGroup(10, 7)
+                    .spawnGroup(15, 7, 2)
+                    .spawnGroup(20, 8)
+                    .spawnGroup(25, 8)
+                    .spawnGroup(30, 9)
+                    .spawnGroup(35, 10)
+                    .build()
     );
 
     public WaveHandler(GameState gameState) {

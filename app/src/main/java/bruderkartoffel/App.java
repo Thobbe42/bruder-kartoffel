@@ -1,6 +1,5 @@
 package bruderkartoffel;
 
-import bruderkartoffel.game.GameState;
 import bruderkartoffel.gui.Mainframe;
 
 import javax.swing.*;
