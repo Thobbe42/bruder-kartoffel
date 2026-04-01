@@ -1,4 +1,7 @@
-package bruderkartoffel.game;
+package bruderkartoffel.game.entity;
+
+import bruderkartoffel.game.weapon.Weapon;
+import bruderkartoffel.game.core.GameState;
 
 import java.util.LinkedList;
 import java.util.List;

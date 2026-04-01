@@ -1,4 +1,4 @@
-package bruderkartoffel.game;
+package bruderkartoffel.game.core;
 
 import bruderkartoffel.gui.GamePanel;
 

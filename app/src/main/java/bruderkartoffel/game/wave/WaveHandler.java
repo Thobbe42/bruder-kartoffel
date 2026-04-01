@@ -1,4 +1,6 @@
-package bruderkartoffel.game;
+package bruderkartoffel.game.wave;
+
+import bruderkartoffel.game.core.GameState;
 
 import java.util.List;
 

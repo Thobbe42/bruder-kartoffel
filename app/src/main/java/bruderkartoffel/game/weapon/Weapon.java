@@ -1,6 +1,9 @@
-package bruderkartoffel.game;
+package bruderkartoffel.game.weapon;
 
-import java.awt.*;
+import bruderkartoffel.game.core.GameState;
+import bruderkartoffel.game.entity.Enemy;
+import bruderkartoffel.game.entity.Player;
+
 import java.util.LinkedList;
 import java.util.List;
 

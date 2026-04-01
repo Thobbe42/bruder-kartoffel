@@ -1,6 +1,6 @@
 package bruderkartoffel.gui;
 
-import bruderkartoffel.game.GameState;
+import bruderkartoffel.game.core.GameState;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

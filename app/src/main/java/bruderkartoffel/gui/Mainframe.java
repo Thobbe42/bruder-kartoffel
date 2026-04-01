@@ -1,13 +1,11 @@
 package bruderkartoffel.gui;
 
-import bruderkartoffel.game.GameClock;
-import bruderkartoffel.game.GameState;
+import bruderkartoffel.game.core.GameClock;
+import bruderkartoffel.game.core.GameState;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class Mainframe extends JFrame {
 

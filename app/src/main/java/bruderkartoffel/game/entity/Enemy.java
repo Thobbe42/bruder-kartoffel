@@ -1,4 +1,6 @@
-package bruderkartoffel.game;
+package bruderkartoffel.game.entity;
+
+import bruderkartoffel.game.core.GameState;
 
 public class Enemy {
 
