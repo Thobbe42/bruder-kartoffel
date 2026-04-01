@@ -38,7 +38,7 @@ public class GameState {
         this.enemies = new LinkedList<>();
 
         // default world setup
-        this.worldSize = new Dimension(2500, 2500);
+        this.worldSize = new Dimension(2000, 2000);
         this.mapSize = new Dimension(worldSize.width - 300, worldSize.height - 300);
         this.camera = new Point(worldSize.width/2, worldSize.height/2);
 
