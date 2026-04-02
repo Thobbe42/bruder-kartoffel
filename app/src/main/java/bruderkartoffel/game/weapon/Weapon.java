@@ -3,6 +3,7 @@ package bruderkartoffel.game.weapon;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.entity.Stats;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +25,10 @@ public class Weapon {
 
     public boolean hasTarget;
 
-    public Weapon(int shotsPerSecond, double baseDamage, double range) {
+    private Stats ownerStats;
+
+    public Weapon(Stats ownerStats, int shotsPerSecond, double baseDamage, double range) {
+        this.ownerStats = ownerStats;
         this.projectiles = new LinkedList<>();
         this.shotsPerSecond = shotsPerSecond;
         this.baseDamage = baseDamage;
@@ -83,7 +87,8 @@ public class Weapon {
     private void spawnProjectile(double worldX, double worldY) {
         double dirX = Math.cos(angle);
         double dirY = Math.sin(angle);
-        Projectile proj = new Projectile(dirX, dirY, worldX, worldY, baseDamage);
+        double damage = baseDamage + (baseDamage * ownerStats.damage/100);
+        Projectile proj = new Projectile(dirX, dirY, worldX, worldY, damage);
         projectiles.add(proj);
     }
 

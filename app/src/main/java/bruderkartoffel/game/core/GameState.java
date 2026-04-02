@@ -40,7 +40,7 @@ public class GameState {
         this.phase = Phase.INIT;
         this.waveHandler = new WaveHandler(this);
 
-        this.player = new Player(20);
+        this.player = new Player();
         this.enemies = new LinkedList<>();
 
         // default world setup
