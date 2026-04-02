@@ -15,7 +15,14 @@ public class LevelUp {
 
     private void randomizeStat() {
         int length = Stats.Stat.values().length;
-        int randomStat = (int)(Math.random() + length) - 1;
+        System.out.println(length);
+        int randomStat = (int)(Math.random() * length);
+        System.out.println(randomStat);
         this.stat = Stats.Stat.values()[randomStat];
+    }
+
+
+    public Stats.Stat getStat() {
+        return this.stat;
     }
 }

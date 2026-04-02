@@ -3,6 +3,7 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.wave.WaveHandler;
 import bruderkartoffel.game.weapon.Projectile;
@@ -95,7 +96,7 @@ public class GamePanel extends JPanel {
         }
 
         if (levelUpLabels == null) {
-            levelUpLabels = new ArrayList<>(4);
+            levelUpLabels = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
                 LevelUpLabel l = new LevelUpLabel(getSize(), i);
                 levelUpLabels.add(l);
@@ -287,8 +288,13 @@ public class GamePanel extends JPanel {
 
 
         if (gameState.getPhase() == GameState.Phase.WAVE_END) {
-            for (LevelUpLabel l: levelUpLabels) {
-                l.setVisible(true);
+            List<LevelUp> levels = ph.getCurrentLevelUps();
+            if (!levels.isEmpty()) {
+                int i = 0;
+                for (LevelUpLabel l : levelUpLabels) {
+                    l.setLevelUp(levels.get(i++));
+                    l.setVisible(true);
+                }
             }
         }
     }

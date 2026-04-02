@@ -29,5 +29,6 @@ public class LevelUpLabel extends JLabel {
 
     public void setLevelUp(LevelUp levelUp) {
         this.levelUp = levelUp;
+        this.setText(levelUp.getStat().name());
     }
 }
