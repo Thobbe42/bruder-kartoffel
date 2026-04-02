@@ -2,6 +2,7 @@ package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
@@ -83,6 +84,7 @@ public class GameState {
         switch (phase) {
             case INIT -> updateInit(screenSize);
             case WAVE -> updateWave(dt, screenSize);
+            case WAVE_END -> updateWaveEnd(screenSize);
         }
     }
 
@@ -102,6 +104,12 @@ public class GameState {
         updateCamera(screenSize);
         handleCollisions();
         waveHandler.update(dt);
+    }
+
+    private void updateWaveEnd(Dimension screenSize) {
+        if (!progressionHandler.isActive() && progressionHandler.getLevelUpsInWave() > 0) {
+            progressionHandler.generateLevelUp(false);
+        }
     }
 
     /**

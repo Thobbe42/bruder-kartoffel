@@ -22,6 +22,9 @@ public class GamePanel extends JPanel {
     private final JLabel playerHitPoints;
     private final JLabel playerExperience;
     private final JLabel waveDisplay;
+    private final JLabel levelUpDisplay;
+
+    private List<LevelUpLabel> levelUpLabels;
 
     private boolean debug = false;
 
@@ -54,10 +57,18 @@ public class GamePanel extends JPanel {
         waveDisplay.setFont(new Font("Bold", Font.BOLD, 25));
         waveDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 
+        this.levelUpDisplay = new JLabel();
+        levelUpDisplay.setBounds(getWidth() - 115, 40, 100, 40);
+        levelUpDisplay.setForeground(Color.WHITE);
+        levelUpDisplay.setFont(new Font("Bold", Font.BOLD, 25));
+        levelUpDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+
+
         setLayout(null);
         add(playerHitPoints);
         add(playerExperience);
         add(waveDisplay);
+        add(levelUpDisplay);
 
         KeyHandler kh = new KeyHandler(gameState, this);
         addKeyListener(kh);
@@ -77,6 +88,20 @@ public class GamePanel extends JPanel {
         // one-time override of wave display bounds
         if (waveDisplay.getBounds().x != (getWidth()/2 - 200)) {
             waveDisplay.setBounds(getWidth()/2 - 200, 40, 400, 40);
+        }
+
+        if (levelUpDisplay.getBounds().x != (getWidth() - 115)) {
+            levelUpDisplay.setBounds(getWidth() - 115, 40, 100, 40);
+        }
+
+        if (levelUpLabels == null) {
+            levelUpLabels = new ArrayList<>(4);
+            for (int i = 0; i < 4; i++) {
+                LevelUpLabel l = new LevelUpLabel(getSize(), i);
+                levelUpLabels.add(l);
+                this.add(l);
+                l.setVisible(false);
+            }
         }
 
         Graphics2D g2d = (Graphics2D)g;
@@ -257,6 +282,15 @@ public class GamePanel extends JPanel {
 
         waveDisplay.setText("Wave " + wave + " - " + timer);
 
+        // level up counter
+        levelUpDisplay.setText("" + ph.getLevelUpsInWave());
+
+
+        if (gameState.getPhase() == GameState.Phase.WAVE_END) {
+            for (LevelUpLabel l: levelUpLabels) {
+                l.setVisible(true);
+            }
+        }
     }
 
 

@@ -1,4 +1,4 @@
-package bruderkartoffel;
+package bruderkartoffel;a
 
 import bruderkartoffel.gui.Mainframe;
 

@@ -1,5 +1,8 @@
 package bruderkartoffel.game.progression;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProgressionHandler {
 
     private int level;
@@ -9,11 +12,16 @@ public class ProgressionHandler {
 
     private int levelUpsInWave;
 
+    private List<LevelUp> currentLevelUps;
+    private boolean active;
+
     public ProgressionHandler() {
         this.level = 1;
         this.exp = 0;
         nextExperienceRequirement();
-        levelUpsInWave = 0;
+        this.levelUpsInWave = 0;
+        this.active = false;
+        this.currentLevelUps = new ArrayList<>(4);
     }
 
 
@@ -23,7 +31,20 @@ public class ProgressionHandler {
             level++;
             this.exp -= requiredExp;
             levelUpsInWave++;
+            System.out.println("Levelup: " + levelUpsInWave);
         }
+    }
+
+    public void generateLevelUp(boolean reroll) {
+        if (!reroll && levelUpsInWave == 0) return;
+
+        this.currentLevelUps = new ArrayList<>(4);
+
+        for (int i = 0; i < 4; i++) {
+            currentLevelUps.add(new LevelUp(0));
+        }
+
+        this.active = true;
     }
 
     public double getExp() {
@@ -36,6 +57,18 @@ public class ProgressionHandler {
 
     public int getLevel() {
         return level;
+    }
+
+    public int getLevelUpsInWave() {
+        return levelUpsInWave;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     private void nextExperienceRequirement() {
