@@ -11,10 +11,6 @@ public class Player {
     private double posX, posY;
     private int size = 70;
 
-    private double experience;
-    private int level;
-    private int experienceForLevelUp;
-
     private List<Weapon> weapons;
     private int weaponCount;
 
@@ -26,12 +22,9 @@ public class Player {
         this.stats = new Stats();
         stats.setDefault();
 
-        this.experience = 0;
-        this.level = 1;
-        nextExperienceRequirement();
         this.weapons = new LinkedList<>();
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 6; i++) {
             weapons.add(new Weapon(stats, 4, 3, 500));
             weaponCount++;
         }
@@ -142,31 +135,6 @@ public class Player {
         double invulnerabilityTime = Math.max(0.2, Math.min(0.4, time));
 
         return (int)(invulnerabilityTime * 60);
-    }
-
-    public double getExperience() {
-        return this.experience;
-    }
-
-    public int getExperienceForLevel() {
-        return experienceForLevelUp;
-    }
-
-    public void addExperience(int experience) {
-        this.experience += experience;
-        if (this.experience >= experienceForLevelUp) {
-            level++;
-            this.experience -= experienceForLevelUp;
-            nextExperienceRequirement();
-        }
-    }
-
-    private void nextExperienceRequirement() {
-        this.experienceForLevelUp = (level + 3) * (level + 3);
-    }
-
-    public int getLevel() {
-        return level;
     }
 
     public Stats getStats() {

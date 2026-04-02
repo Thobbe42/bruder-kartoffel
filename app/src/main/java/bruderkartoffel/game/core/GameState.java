@@ -2,6 +2,7 @@ package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
 import bruderkartoffel.game.wave.WaveHandler;
@@ -14,7 +15,7 @@ public class GameState {
 
 
     public enum Phase{
-        INIT, WAVE, SHOP
+        INIT, WAVE, WAVE_END, SHOP
     }
 
     public boolean up, left, down, right;
@@ -30,6 +31,7 @@ public class GameState {
     private Phase phase;
 
     private WaveHandler waveHandler;
+    private ProgressionHandler progressionHandler;
 
     /**
      * Creates a new GameState with default values.
@@ -39,6 +41,8 @@ public class GameState {
 
         this.phase = Phase.INIT;
         this.waveHandler = new WaveHandler(this);
+
+        this.progressionHandler = new ProgressionHandler();
 
         this.player = new Player();
         this.enemies = new LinkedList<>();
@@ -152,7 +156,7 @@ public class GameState {
                     proj.setDisabled(true);
                     e.dealDamage(proj.getDamage());
                     if (e.isDead()) {
-                        player.addExperience(e.getExperienceValue());
+                        progressionHandler.addExperience(e.getExperienceValue());
                     }
                 }
             }
@@ -270,5 +274,9 @@ public class GameState {
 
     public WaveHandler getWaveHandler() {
         return this.waveHandler;
+    }
+
+    public ProgressionHandler getProgressionHandler() {
+        return progressionHandler;
     }
 }

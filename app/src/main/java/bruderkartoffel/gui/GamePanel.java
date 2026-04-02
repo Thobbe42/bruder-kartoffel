@@ -3,6 +3,7 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.wave.WaveHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
@@ -44,9 +45,6 @@ public class GamePanel extends JPanel {
         playerExperience.setForeground(Color.WHITE);
         playerExperience.setFont(new Font("Bold", Font.BOLD, 25));
         playerExperience.setHorizontalAlignment(SwingConstants.RIGHT);
-        int exp = (int)gameState.getPlayer().getExperience();
-        int level = gameState.getPlayer().getLevel();
-        playerExperience.setText("Lvl: " + level);
         playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
 
 
@@ -239,9 +237,10 @@ public class GamePanel extends JPanel {
         playerHitPoints.setText((int)hp + "/" + (int)maxHp);
 
         // player experience
-        int level = gameState.getPlayer().getLevel();
-        double exp = gameState.getPlayer().getExperience();
-        int maxExp = gameState.getPlayer().getExperienceForLevel();
+        ProgressionHandler ph = gameState.getProgressionHandler();
+        int level = ph.getLevel();
+        double exp = ph.getExp();
+        int maxExp = (int)ph.getRequiredExp();
 
         width = (int)(exp/maxExp * 400);
         g2d.setColor(Color.GREEN);
@@ -257,6 +256,12 @@ public class GamePanel extends JPanel {
         int timer = (int)handler.getTimer();
 
         waveDisplay.setText("Wave " + wave + " - " + timer);
+
+    }
+
+
+
+    private void drawEndOfWave(Graphics2D g2d) {
 
     }
 

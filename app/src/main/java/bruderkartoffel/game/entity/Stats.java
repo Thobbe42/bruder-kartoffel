@@ -14,6 +14,9 @@ public class Stats {
     public double speed;
 
 
+    public enum Stat{
+      HP, DAMAGE, ATK_SPEED, ARMOR, DODGE, SPEED
+    }
 
     public void setDefault() {
         this.maxHP = 10;
