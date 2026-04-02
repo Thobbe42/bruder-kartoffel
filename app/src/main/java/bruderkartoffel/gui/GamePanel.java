@@ -296,6 +296,10 @@ public class GamePanel extends JPanel {
                     l.setVisible(true);
                 }
             }
+        } else {
+            for (LevelUpLabel l: levelUpLabels) {
+                l.setVisible(false);
+            }
         }
     }
 

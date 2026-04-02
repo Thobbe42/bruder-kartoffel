@@ -1,9 +1,15 @@
 package bruderkartoffel.game.progression;
 
+import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.entity.Stats;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProgressionHandler {
+
+
+    private Player player;
 
     private int level;
 
@@ -15,7 +21,9 @@ public class ProgressionHandler {
     private List<LevelUp> currentLevelUps;
     private boolean active;
 
-    public ProgressionHandler() {
+
+    public ProgressionHandler(Player player) {
+        this.player = player;
         this.level = 1;
         this.exp = 0;
         nextExperienceRequirement();
@@ -31,6 +39,9 @@ public class ProgressionHandler {
             level++;
             this.exp -= requiredExp;
             levelUpsInWave++;
+            Stats stats = player.getStats();
+            stats.maxHP++;
+            stats.hp++;
         }
     }
 
@@ -40,10 +51,25 @@ public class ProgressionHandler {
         this.currentLevelUps = new ArrayList<>();
 
         for (int i = 0; i < 4; i++) {
-            currentLevelUps.add(new LevelUp(0));
+            currentLevelUps.add(new LevelUp(this));
         }
 
         this.active = true;
+    }
+
+    public void apply(LevelUp levelUp) {
+        Stats stats = player.getStats();
+        double value = levelUp.getValue();
+        switch(levelUp.getStat()) {
+            case HP -> stats.addMaxHP(value);
+            case ARMOR -> stats.addArmor(value);
+            case DAMAGE -> stats.addDamage(value);
+            case DODGE -> stats.addDodge(value);
+            case SPEED -> stats.addSpeed(value);
+            case ATK_SPEED -> stats.addAtkSpeed(value);
+        }
+        levelUpsInWave--;
+        active = false;
     }
 
     public double getExp() {
@@ -64,10 +90,6 @@ public class ProgressionHandler {
 
     public boolean isActive() {
         return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     private void nextExperienceRequirement() {

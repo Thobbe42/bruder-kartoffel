@@ -5,13 +5,13 @@ import bruderkartoffel.game.progression.LevelUp;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class LevelUpLabel extends JLabel {
 
     private LevelUp levelUp;
 
-    // width: (screen width / 2) / 4  -  10px
-    // height /screen height / 2)
     public LevelUpLabel(Dimension screenSize, int index) {
 
         int width = (screenSize.width / 2) / 4 - 10;
@@ -21,10 +21,40 @@ public class LevelUpLabel extends JLabel {
 
         setBounds(x, y, width, height);
 
-        setForeground(Color.BLACK);
+        setForeground(Color.WHITE);
         setBorder(new LineBorder(Color.BLACK, 2));
-        setBackground(Color.DARK_GRAY);
+        setFont(new Font("Bold", Font.BOLD, 25));
+        setHorizontalAlignment(SwingConstants.CENTER);
+        setBackground(Color.GRAY);
         setOpaque(true);
+
+
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                levelUp.apply();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setBackground(Color.lightGray);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setBackground(Color.GRAY);
+            }
+        });
     }
 
     public void setLevelUp(LevelUp levelUp) {

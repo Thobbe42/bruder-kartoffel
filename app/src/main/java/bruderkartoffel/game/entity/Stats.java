@@ -28,4 +28,29 @@ public class Stats {
 
         this.speed = 300;
     }
+
+    public void addMaxHP(double value) {
+        this.maxHP += value;
+        this.hp += value;
+    }
+
+    public void addDamage(double value) {
+        this.damage += value;
+    }
+
+    public void addAtkSpeed(double value) {
+        this.attackSpeed += value;
+    }
+
+    public void addArmor(double value) {
+        this.armor += value;
+    }
+
+    public void addDodge(double value) {
+        this.dodge += value;
+    }
+
+    public void addSpeed(double value) {
+        this.speed += value;
+    }
 }

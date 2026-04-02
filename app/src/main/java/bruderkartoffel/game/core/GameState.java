@@ -2,6 +2,7 @@ package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.entity.Stats;
 import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
@@ -43,10 +44,10 @@ public class GameState {
         this.phase = Phase.INIT;
         this.waveHandler = new WaveHandler(this);
 
-        this.progressionHandler = new ProgressionHandler();
-
         this.player = new Player();
         this.enemies = new LinkedList<>();
+
+        this.progressionHandler = new ProgressionHandler(player);
 
         // default world setup
         this.worldSize = new Dimension(2000, 2000);
@@ -107,7 +108,9 @@ public class GameState {
     }
 
     private void updateWaveEnd(Dimension screenSize) {
-        if (!progressionHandler.isActive() && progressionHandler.getLevelUpsInWave() > 0) {
+        if (progressionHandler.getLevelUpsInWave() == 0) {
+            waveHandler.nextWave();
+        } else if (!progressionHandler.isActive()) {
             progressionHandler.generateLevelUp(false);
         }
     }
