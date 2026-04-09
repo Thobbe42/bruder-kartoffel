@@ -26,7 +26,7 @@ public class GamePanel extends JPanel {
     private final JLabel levelUpDisplay;
 
     private List<LevelUpPanel> levelUpPanels;
-    private StatsLabel statsLabel;
+    private StatsPanel statsPanel;
 
     private boolean debug = false;
 
@@ -105,9 +105,9 @@ public class GamePanel extends JPanel {
             }
         }
 
-        if (statsLabel == null) {
-            statsLabel = new StatsLabel(gameState.getPlayer().getStats(), getSize());
-            add(statsLabel);
+        if (statsPanel == null) {
+            statsPanel = new StatsPanel(gameState.getPlayer().getStats(), getSize());
+            add(statsPanel);
         }
 
         Graphics2D g2d = (Graphics2D)g;
@@ -302,13 +302,13 @@ public class GamePanel extends JPanel {
                 }
             }
 
-            statsLabel.refresh();
-            statsLabel.setVisible(true);
+            statsPanel.refresh();
+            statsPanel.setVisible(true);
         } else {
             for (LevelUpPanel l: levelUpPanels) {
                 l.setVisible(false);
             }
-            statsLabel.setVisible(false);
+            statsPanel.setVisible(false);
         }
     }
 
