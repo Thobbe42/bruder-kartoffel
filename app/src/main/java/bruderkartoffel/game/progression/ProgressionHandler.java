@@ -38,6 +38,7 @@ public class ProgressionHandler {
         if (this.exp >= requiredExp) {
             level++;
             this.exp -= requiredExp;
+            nextExperienceRequirement();
             levelUpsInWave++;
             Stats stats = player.getStats();
             stats.maxHP++;

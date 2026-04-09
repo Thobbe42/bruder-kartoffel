@@ -25,7 +25,8 @@ public class GamePanel extends JPanel {
     private final JLabel waveDisplay;
     private final JLabel levelUpDisplay;
 
-    private List<LevelUpLabel> levelUpLabels;
+    private List<LevelUpPanel> levelUpPanels;
+    private StatsLabel statsLabel;
 
     private boolean debug = false;
 
@@ -64,7 +65,6 @@ public class GamePanel extends JPanel {
         levelUpDisplay.setFont(new Font("Bold", Font.BOLD, 25));
         levelUpDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 
-
         setLayout(null);
         add(playerHitPoints);
         add(playerExperience);
@@ -95,14 +95,19 @@ public class GamePanel extends JPanel {
             levelUpDisplay.setBounds(getWidth() - 115, 40, 100, 40);
         }
 
-        if (levelUpLabels == null) {
-            levelUpLabels = new ArrayList<>();
+        if (levelUpPanels == null) {
+            levelUpPanels = new ArrayList<>();
             for (int i = 0; i < 4; i++) {
-                LevelUpLabel l = new LevelUpLabel(getSize(), i);
-                levelUpLabels.add(l);
+                LevelUpPanel l = new LevelUpPanel(getSize(), i);
+                levelUpPanels.add(l);
                 this.add(l);
                 l.setVisible(false);
             }
+        }
+
+        if (statsLabel == null) {
+            statsLabel = new StatsLabel(gameState.getPlayer().getStats(), getSize());
+            add(statsLabel);
         }
 
         Graphics2D g2d = (Graphics2D)g;
@@ -291,15 +296,19 @@ public class GamePanel extends JPanel {
             List<LevelUp> levels = ph.getCurrentLevelUps();
             if (!levels.isEmpty()) {
                 int i = 0;
-                for (LevelUpLabel l : levelUpLabels) {
+                for (LevelUpPanel l : levelUpPanels) {
                     l.setLevelUp(levels.get(i++));
                     l.setVisible(true);
                 }
             }
+
+            statsLabel.refresh();
+            statsLabel.setVisible(true);
         } else {
-            for (LevelUpLabel l: levelUpLabels) {
+            for (LevelUpPanel l: levelUpPanels) {
                 l.setVisible(false);
             }
+            statsLabel.setVisible(false);
         }
     }
 
