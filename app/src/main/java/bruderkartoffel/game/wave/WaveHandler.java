@@ -1,6 +1,7 @@
 package bruderkartoffel.game.wave;
 
 import bruderkartoffel.game.core.GameState;
+import bruderkartoffel.game.weapon.Weapon;
 
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class WaveHandler {
 
 
     private List<Wave> waveConfigs = List.of(
-            new WaveBuilder(20)
-                    .spawnGroup(0, 2)
-                    .spawnGroup(5, 2)
+            new WaveBuilder(10)
+                    .spawnGroup(0, 16)
+                    .spawnGroup(4, 25)
                     .spawnGroup(10, 3)
                     .spawnGroup(15, 3)
                     .build(),
@@ -66,8 +67,11 @@ public class WaveHandler {
     public void update(double dt) {
         this.timer -= dt;
         if (timer <= 0) {
-            gameState.setPhase(GameState.Phase.SHOP);
+            gameState.setPhase(GameState.Phase.WAVE_END);
             gameState.getEnemies().clear();
+            for (Weapon w: gameState.getPlayer().getWeapons()) {
+                w.getProjectiles().clear();
+            }
         }
 
         double timeStamp = currentWave.getDuration() - timer;

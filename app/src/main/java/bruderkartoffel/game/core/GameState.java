@@ -2,6 +2,9 @@ package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.entity.Stats;
+import bruderkartoffel.game.progression.LevelUp;
+import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
 import bruderkartoffel.game.wave.WaveHandler;
@@ -14,7 +17,7 @@ public class GameState {
 
 
     public enum Phase{
-        INIT, WAVE, SHOP
+        INIT, WAVE, WAVE_END, SHOP
     }
 
     public boolean up, left, down, right;
@@ -30,6 +33,7 @@ public class GameState {
     private Phase phase;
 
     private WaveHandler waveHandler;
+    private ProgressionHandler progressionHandler;
 
     /**
      * Creates a new GameState with default values.
@@ -40,8 +44,10 @@ public class GameState {
         this.phase = Phase.INIT;
         this.waveHandler = new WaveHandler(this);
 
-        this.player = new Player(20);
+        this.player = new Player();
         this.enemies = new LinkedList<>();
+
+        this.progressionHandler = new ProgressionHandler(player);
 
         // default world setup
         this.worldSize = new Dimension(2000, 2000);
@@ -79,6 +85,7 @@ public class GameState {
         switch (phase) {
             case INIT -> updateInit(screenSize);
             case WAVE -> updateWave(dt, screenSize);
+            case WAVE_END -> updateWaveEnd(screenSize);
         }
     }
 
@@ -98,6 +105,14 @@ public class GameState {
         updateCamera(screenSize);
         handleCollisions();
         waveHandler.update(dt);
+    }
+
+    private void updateWaveEnd(Dimension screenSize) {
+        if (progressionHandler.getLevelUpsInWave() == 0) {
+            waveHandler.nextWave();
+        } else if (!progressionHandler.isActive()) {
+            progressionHandler.generateLevelUp(false);
+        }
     }
 
     /**
@@ -152,7 +167,7 @@ public class GameState {
                     proj.setDisabled(true);
                     e.dealDamage(proj.getDamage());
                     if (e.isDead()) {
-                        player.addExperience(e.getExperienceValue());
+                        progressionHandler.addExperience(e.getExperienceValue());
                     }
                 }
             }
@@ -270,5 +285,9 @@ public class GameState {
 
     public WaveHandler getWaveHandler() {
         return this.waveHandler;
+    }
+
+    public ProgressionHandler getProgressionHandler() {
+        return progressionHandler;
     }
 }

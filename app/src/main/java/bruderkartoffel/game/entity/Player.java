@@ -11,28 +11,21 @@ public class Player {
     private double posX, posY;
     private int size = 70;
 
-    private int speed = 300;
-    private double hitPoints, maxHitPoints;
-
-    private double experience;
-    private int level;
-    private int experienceForLevelUp;
-
     private List<Weapon> weapons;
     private int weaponCount;
 
     private int iFrames = 0;
 
-    public Player(double hitPoints) {
-        this.hitPoints = hitPoints;
-        this.maxHitPoints = hitPoints;
-        this.experience = 0;
-        this.level = 1;
-        nextExperienceRequirement();
+    private Stats stats;
+
+    public Player() {
+        this.stats = new Stats();
+        stats.setDefault();
+
         this.weapons = new LinkedList<>();
 
         for (int i = 0; i < 6; i++) {
-            weapons.add(new Weapon(4, 3, 500));
+            weapons.add(new Weapon(stats, 4, 3, 500));
             weaponCount++;
         }
     }
@@ -54,8 +47,8 @@ public class Player {
             dy /= length;
         }
 
-        double targetX = posX + dx * speed * delta;
-        double targetY = posY + dy * speed * delta;
+        double targetX = posX + dx * stats.speed * delta;
+        double targetY = posY + dy * stats.speed * delta;
         int border = (gameState.getWorldSize().width - gameState.getMapSize().width)/2;
 
         if (targetX < size/2.0 + border) targetX = size/2.0 + border;
@@ -121,51 +114,30 @@ public class Player {
     }
 
     public double getHitPoints() {
-        return hitPoints;
+        return stats.hp;
     }
 
     public double getMaxHitPoints() {
-        return maxHitPoints;
+        return stats.maxHP;
     }
 
     public void takeDamage(double damage) {
         if (iFrames == 0) {
-            this.hitPoints -= damage;
+            stats.hp -= damage;
             iFrames = calculateIFrames(damage);
         }
     }
 
     private int calculateIFrames(double damage) {
         // 0.4 * damage% / 15%
-        double damagePercentTaken = damage/maxHitPoints * 100;
+        double damagePercentTaken = damage/stats.maxHP * 100;
         double time = 0.4 * (damagePercentTaken/15);
         double invulnerabilityTime = Math.max(0.2, Math.min(0.4, time));
 
         return (int)(invulnerabilityTime * 60);
     }
 
-    public double getExperience() {
-        return this.experience;
-    }
-
-    public int getExperienceForLevel() {
-        return experienceForLevelUp;
-    }
-
-    public void addExperience(int experience) {
-        this.experience += experience;
-        if (this.experience >= experienceForLevelUp) {
-            level++;
-            this.experience -= experienceForLevelUp;
-            nextExperienceRequirement();
-        }
-    }
-
-    private void nextExperienceRequirement() {
-        this.experienceForLevelUp = (level + 3) * (level + 3);
-    }
-
-    public int getLevel() {
-        return level;
+    public Stats getStats() {
+        return stats;
     }
 }

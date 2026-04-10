@@ -3,6 +3,8 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.progression.LevelUp;
+import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.wave.WaveHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
@@ -21,6 +23,10 @@ public class GamePanel extends JPanel {
     private final JLabel playerHitPoints;
     private final JLabel playerExperience;
     private final JLabel waveDisplay;
+    private final JLabel levelUpDisplay;
+
+    private List<LevelUpPanel> levelUpPanels;
+    private StatsPanel statsPanel;
 
     private boolean debug = false;
 
@@ -44,9 +50,6 @@ public class GamePanel extends JPanel {
         playerExperience.setForeground(Color.WHITE);
         playerExperience.setFont(new Font("Bold", Font.BOLD, 25));
         playerExperience.setHorizontalAlignment(SwingConstants.RIGHT);
-        int exp = (int)gameState.getPlayer().getExperience();
-        int level = gameState.getPlayer().getLevel();
-        playerExperience.setText("Lvl: " + level);
         playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
 
 
@@ -56,10 +59,17 @@ public class GamePanel extends JPanel {
         waveDisplay.setFont(new Font("Bold", Font.BOLD, 25));
         waveDisplay.setHorizontalAlignment(SwingConstants.CENTER);
 
+        this.levelUpDisplay = new JLabel();
+        levelUpDisplay.setBounds(getWidth() - 115, 40, 100, 40);
+        levelUpDisplay.setForeground(Color.WHITE);
+        levelUpDisplay.setFont(new Font("Bold", Font.BOLD, 25));
+        levelUpDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+
         setLayout(null);
         add(playerHitPoints);
         add(playerExperience);
         add(waveDisplay);
+        add(levelUpDisplay);
 
         KeyHandler kh = new KeyHandler(gameState, this);
         addKeyListener(kh);
@@ -79,6 +89,25 @@ public class GamePanel extends JPanel {
         // one-time override of wave display bounds
         if (waveDisplay.getBounds().x != (getWidth()/2 - 200)) {
             waveDisplay.setBounds(getWidth()/2 - 200, 40, 400, 40);
+        }
+
+        if (levelUpDisplay.getBounds().x != (getWidth() - 115)) {
+            levelUpDisplay.setBounds(getWidth() - 115, 40, 100, 40);
+        }
+
+        if (levelUpPanels == null) {
+            levelUpPanels = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                LevelUpPanel l = new LevelUpPanel(getSize(), i);
+                levelUpPanels.add(l);
+                this.add(l);
+                l.setVisible(false);
+            }
+        }
+
+        if (statsPanel == null) {
+            statsPanel = new StatsPanel(gameState.getPlayer().getStats(), getSize());
+            add(statsPanel);
         }
 
         Graphics2D g2d = (Graphics2D)g;
@@ -239,9 +268,10 @@ public class GamePanel extends JPanel {
         playerHitPoints.setText((int)hp + "/" + (int)maxHp);
 
         // player experience
-        int level = gameState.getPlayer().getLevel();
-        double exp = gameState.getPlayer().getExperience();
-        int maxExp = gameState.getPlayer().getExperienceForLevel();
+        ProgressionHandler ph = gameState.getProgressionHandler();
+        int level = ph.getLevel();
+        double exp = ph.getExp();
+        int maxExp = (int)ph.getRequiredExp();
 
         width = (int)(exp/maxExp * 400);
         g2d.setColor(Color.GREEN);
@@ -257,6 +287,34 @@ public class GamePanel extends JPanel {
         int timer = (int)handler.getTimer();
 
         waveDisplay.setText("Wave " + wave + " - " + timer);
+
+        // level up counter
+        levelUpDisplay.setText("" + ph.getLevelUpsInWave());
+
+
+        if (gameState.getPhase() == GameState.Phase.WAVE_END) {
+            List<LevelUp> levels = ph.getCurrentLevelUps();
+            if (!levels.isEmpty()) {
+                int i = 0;
+                for (LevelUpPanel l : levelUpPanels) {
+                    l.setLevelUp(levels.get(i++));
+                    l.setVisible(true);
+                }
+            }
+
+            statsPanel.refresh();
+            statsPanel.setVisible(true);
+        } else {
+            for (LevelUpPanel l: levelUpPanels) {
+                l.setVisible(false);
+            }
+            statsPanel.setVisible(false);
+        }
+    }
+
+
+
+    private void drawEndOfWave(Graphics2D g2d) {
 
     }
 
