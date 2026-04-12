@@ -17,7 +17,7 @@ public class GameState {
 
 
     public enum Phase{
-        INIT, WAVE, WAVE_END, SHOP
+        INIT, WAVE, WAVE_END, SHOP, PAUSE
     }
 
     public boolean up, left, down, right;
