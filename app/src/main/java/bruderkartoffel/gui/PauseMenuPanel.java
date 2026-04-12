@@ -8,9 +8,10 @@ public class PauseMenuPanel extends JPanel {
     private final JLabel resumeLabel;
     private final JLabel exitLabel;
 
-    public PauseMenuPanel(Dimension size) {
-        setBounds(0, 0, size.width, size.height);
+    public PauseMenuPanel() {
+        //setBounds(0, 0, size.width, size.height);
         setLayout(null);
+        setOpaque(false);
 
 
         this.resumeLabel = new JLabel("Resume");
