@@ -59,7 +59,7 @@ public class ProgressionHandler {
         }
 
         this.active = true;
-        
+
         setLevels.accept(currentLevelUps);
     }
 

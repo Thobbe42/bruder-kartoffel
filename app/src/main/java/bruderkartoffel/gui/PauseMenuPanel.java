@@ -26,7 +26,7 @@ public class PauseMenuPanel extends JPanel {
         resumeLabel.setFont(new Font("Bold", Font.BOLD, 25));
         resumeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         resumeLabel.setOpaque(true);
-        resumeLabel.setBounds(48, 48, 400, 48);
+        resumeLabel.setBounds(48, 128, 400, 48);
 
         this.exitLabel = new JLabel("Exit");
         exitLabel.setForeground(Color.WHITE);
@@ -34,7 +34,7 @@ public class PauseMenuPanel extends JPanel {
         exitLabel.setFont(new Font("Bold", Font.BOLD, 25));
         exitLabel.setHorizontalAlignment(SwingConstants.CENTER);
         exitLabel.setOpaque(true);
-        exitLabel.setBounds(48, 104, 400, 48);
+        exitLabel.setBounds(48, 196, 400, 48);
 
 
         exitLabel.addMouseListener(new MouseAdapter() {

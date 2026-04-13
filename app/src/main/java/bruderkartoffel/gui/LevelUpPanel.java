@@ -40,6 +40,7 @@ public class LevelUpPanel extends JPanel {
         }
 
         add(statsPanel);
+        statsPanel.refresh();
         statsPanel.setVisible(true);
 
         inited = true;
@@ -49,6 +50,7 @@ public class LevelUpPanel extends JPanel {
         for (int i = 0; i < levels.size(); i++) {
             upgradePanels.get(i).setLevelUp(levels.get(i));
         }
+        statsPanel.refresh();
     }
 
     public boolean isInited() {

@@ -17,7 +17,7 @@ public class StatsPanel extends JPanel {
     public StatsPanel(Stats stats, Dimension screenSize) {
         this.stats = stats;
 
-        int width = screenSize.width / 4  - 10;
+        int width = screenSize.height / 3 + 32;
         int height = (int)(screenSize.height * 3/4);
         int y = 170;
         int x = 24 + (screenSize.height/3 + 8) * 4 + 16;
