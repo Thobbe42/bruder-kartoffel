@@ -25,9 +25,6 @@ public class GamePanel extends JPanel {
     private final JLabel waveDisplay;
     private final JLabel levelUpDisplay;
 
-    private List<LevelUpPanel> levelUpPanels;
-    private StatsPanel statsPanel;
-
     private boolean debug = false;
 
     public GamePanel(GameState gameState) {
@@ -95,20 +92,7 @@ public class GamePanel extends JPanel {
             levelUpDisplay.setBounds(getWidth() - 115, 40, 100, 40);
         }
 
-        if (levelUpPanels == null) {
-            levelUpPanels = new ArrayList<>();
-            for (int i = 0; i < 4; i++) {
-                LevelUpPanel l = new LevelUpPanel(getSize(), i);
-                levelUpPanels.add(l);
-                this.add(l);
-                l.setVisible(false);
-            }
-        }
 
-        if (statsPanel == null) {
-            statsPanel = new StatsPanel(gameState.getPlayer().getStats(), getSize());
-            add(statsPanel);
-        }
 
         Graphics2D g2d = (Graphics2D)g;
         AffineTransform old = g2d.getTransform();
@@ -290,26 +274,6 @@ public class GamePanel extends JPanel {
 
         // level up counter
         levelUpDisplay.setText("" + ph.getLevelUpsInWave());
-
-
-        if (gameState.getPhase() == GameState.Phase.WAVE_END) {
-            List<LevelUp> levels = ph.getCurrentLevelUps();
-            if (!levels.isEmpty()) {
-                int i = 0;
-                for (LevelUpPanel l : levelUpPanels) {
-                    l.setLevelUp(levels.get(i++));
-                    l.setVisible(true);
-                }
-            }
-
-            statsPanel.refresh();
-            statsPanel.setVisible(true);
-        } else {
-            for (LevelUpPanel l: levelUpPanels) {
-                l.setVisible(false);
-            }
-            statsPanel.setVisible(false);
-        }
     }
 
 
