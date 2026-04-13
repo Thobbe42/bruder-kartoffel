@@ -3,6 +3,7 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.material.MaterialDrop;
 import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.wave.WaveHandler;
@@ -126,6 +127,23 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.BLACK);
         g2d.drawOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
+
+        // draw materials
+        List<MaterialDrop> materialDrops;
+
+        synchronized (gameState.getMaterialDrops()) {
+            materialDrops = new ArrayList<>(gameState.getMaterialDrops());
+        }
+
+        for (MaterialDrop material: materialDrops) {
+            g2d.setColor(Color.GREEN);
+            size = material.getSize();
+            radius = size / 2;
+            Point pos = material.getPos();
+            g2d.fillOval(pos.x - radius, pos.y - radius, size, size);
+            g2d.setColor(Color.BLACK);
+            g2d.drawOval(pos.x - radius, pos.y - radius, size, size);
+        }
 
         // draw enemies
         List<Enemy> enemiesSnapshot;

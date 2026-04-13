@@ -3,6 +3,7 @@ package bruderkartoffel.game.core;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
 import bruderkartoffel.game.entity.Stats;
+import bruderkartoffel.game.material.MaterialDrop;
 import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
@@ -25,6 +26,7 @@ public class GameState {
 
     private Player player;
     private List<Enemy> enemies;
+    private List<MaterialDrop> materialDrops;
 
     private Dimension worldSize;
     private Dimension mapSize;
@@ -51,6 +53,7 @@ public class GameState {
 
         this.player = new Player();
         this.enemies = new LinkedList<>();
+        this.materialDrops = new LinkedList<>();
 
         this.progressionHandler = new ProgressionHandler(player);
 
@@ -172,7 +175,10 @@ public class GameState {
                     proj.setDisabled(true);
                     e.dealDamage(proj.getDamage());
                     if (e.isDead()) {
-                        progressionHandler.addExperience(e.getExperienceValue());
+                        int expVal = e.getExperienceValue();
+                        Point pos = new Point((int)e.getPosX(), (int)e.getPosY());
+                        materialDrops.add(new MaterialDrop(expVal, 10, pos));
+                        progressionHandler.addExperience(expVal);
                     }
                 }
             }
@@ -295,5 +301,9 @@ public class GameState {
 
     public ProgressionHandler getProgressionHandler() {
         return progressionHandler;
+    }
+
+    public List<MaterialDrop> getMaterialDrops() {
+        return materialDrops;
     }
 }
