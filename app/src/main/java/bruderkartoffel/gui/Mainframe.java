@@ -5,9 +5,7 @@ import bruderkartoffel.game.core.GameState;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 
 public class Mainframe extends JFrame {
 
@@ -25,6 +23,7 @@ public class Mainframe extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
+        setUndecorated(true);
 
         // init global keys
         initKeyHandling();
@@ -47,6 +46,16 @@ public class Mainframe extends JFrame {
 
                 gamePanel.setBounds(0, 0, w, h);
                 pausePanel.setBounds(0, 0, w, h);
+            }
+        });
+
+        this.addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                super.windowLostFocus(e);
+                pausePanel.setPausedPhase(gameState.getPhase());
+                gameState.setPhase(GameState.Phase.PAUSE);
+                pausePanel.setVisible(true);
             }
         });
 
