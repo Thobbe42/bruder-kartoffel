@@ -18,9 +18,13 @@ public class Player {
 
     private Stats stats;
 
-    public Player() {
+    private int materials;
+
+    public Player(int startMaterial) {
         this.stats = new Stats();
         stats.setDefault();
+
+        this.materials = startMaterial;
 
         this.weapons = new LinkedList<>();
 
@@ -126,6 +130,10 @@ public class Player {
             stats.hp -= damage;
             iFrames = calculateIFrames(damage);
         }
+    }
+
+    public void addMaterial(int amount) {
+        this.materials += amount;
     }
 
     private int calculateIFrames(double damage) {

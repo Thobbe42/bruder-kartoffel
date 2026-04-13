@@ -51,7 +51,7 @@ public class GameState {
         this.phase = Phase.INIT;
         this.waveHandler = new WaveHandler(this);
 
-        this.player = new Player();
+        this.player = new Player(40);
         this.enemies = new LinkedList<>();
         this.materialDrops = new LinkedList<>();
 
@@ -107,6 +107,8 @@ public class GameState {
     private void updateWave(double dt, Dimension screenSize) {
         player.update(this, dt);
         enemies.removeIf(Enemy::isDead);
+        materialDrops.removeIf(m -> !m.isActive());
+
         for (Enemy e: enemies) {
             e.update(this, dt, player.getPosX(), player.getPosY());
         }
@@ -178,7 +180,7 @@ public class GameState {
                         int expVal = e.getExperienceValue();
                         Point pos = new Point((int)e.getPosX(), (int)e.getPosY());
                         materialDrops.add(new MaterialDrop(expVal, 10, pos));
-                        progressionHandler.addExperience(expVal);
+                        // progressionHandler.addExperience(expVal);
                     }
                 }
             }
@@ -196,6 +198,26 @@ public class GameState {
 
             if (distSq <= radiusSum * radiusSum) {
                 player.takeDamage(e.getBaseDamage());
+            }
+        }
+
+
+        // player-material collision
+        for (MaterialDrop material: materialDrops) {
+            if (!material.isActive()) continue;
+
+            Point pos = material.getPos();
+
+            double dx = pos.x - player.getPosX();
+            double dy = pos.y - player.getPosY();
+
+            double distSq = dx * dx + dy * dy;
+            int radiusSum = material.getSize()/2 + player.getSize()/2;
+
+            if (distSq <= radiusSum * radiusSum) {
+                progressionHandler.addExperience(material.getValue());
+                player.addMaterial(material.getValue());
+                material.setActive(false);
             }
         }
     }
