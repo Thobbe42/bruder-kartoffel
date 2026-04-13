@@ -29,7 +29,7 @@ public class MaterialDrop {
         Point playerPos = new Point((int)p.getPosX(), (int)p.getPosY());
         int maxDist = p.getCollectionRadius();
 
-        double dx = playerPos.x - pos.x;    
+        double dx = playerPos.x - pos.x;
         double dy = playerPos.y - pos.y;
 
         double distSq = dx * dx + dy * dy;

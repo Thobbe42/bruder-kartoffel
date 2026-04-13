@@ -23,6 +23,7 @@ public class GamePanel extends JPanel {
 
     private final JLabel playerHitPoints;
     private final JLabel playerExperience;
+    private final JLabel playerMaterial;
     private final JLabel waveDisplay;
     private final JLabel levelUpDisplay;
 
@@ -43,12 +44,18 @@ public class GamePanel extends JPanel {
         playerHitPoints.setText(hp + "/" + maxHp);
         playerHitPoints.setBorder(new LineBorder(Color.BLACK, 4));
 
-        playerExperience = new JLabel();
+        this.playerExperience = new JLabel();
         playerExperience.setBounds(15, 70, 400, 40);
         playerExperience.setForeground(Color.WHITE);
         playerExperience.setFont(new Font("Bold", Font.BOLD, 25));
         playerExperience.setHorizontalAlignment(SwingConstants.RIGHT);
         playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
+
+        this.playerMaterial = new JLabel();
+        playerMaterial.setBounds(60, 125, 300, 40);
+        playerMaterial.setForeground(Color.WHITE);
+        playerMaterial.setFont(new Font("Bold", Font.BOLD, 25));
+        playerMaterial.setHorizontalAlignment(SwingConstants.LEFT);
 
 
         this.waveDisplay = new JLabel();
@@ -66,6 +73,7 @@ public class GamePanel extends JPanel {
         setLayout(null);
         add(playerHitPoints);
         add(playerExperience);
+        add(playerMaterial);
         add(waveDisplay);
         add(levelUpDisplay);
 
@@ -282,6 +290,15 @@ public class GamePanel extends JPanel {
         g2d.fillRect(15 + width, 70, 400 - width, 40);
 
         playerExperience.setText("Lvl. " + level);
+
+
+        // player material count
+        g2d.setColor(Color.GREEN);
+        g2d.fillOval(15, 125, 40, 40);
+        g2d.setColor(Color.BLACK);
+        g2d.drawOval(15, 125, 40, 40);
+        playerMaterial.setText("" + gameState.getPlayer().getMaterials());
+
 
         // wave number and timer
         WaveHandler handler = gameState.getWaveHandler();

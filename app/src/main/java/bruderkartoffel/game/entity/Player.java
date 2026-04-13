@@ -153,4 +153,8 @@ public class Player {
     public int getCollectionRadius() {
         return collectionRadius;
     }
+
+    public int getMaterials() {
+        return materials;
+    }
 }

@@ -69,6 +69,7 @@ public class WaveHandler {
         if (timer <= 0) {
             gameState.setPhase(GameState.Phase.WAVE_END);
             gameState.getEnemies().clear();
+            gameState.getMaterialDrops().clear();
             for (Weapon w: gameState.getPlayer().getWeapons()) {
                 w.getProjectiles().clear();
             }
