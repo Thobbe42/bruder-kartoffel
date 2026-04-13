@@ -10,6 +10,7 @@ public class Player {
 
     private double posX, posY;
     private int size = 70;
+    private int collectionRadius = 200;
 
     private List<Weapon> weapons;
     private int weaponCount;
@@ -18,9 +19,13 @@ public class Player {
 
     private Stats stats;
 
-    public Player() {
+    private int materials;
+
+    public Player(int startMaterial) {
         this.stats = new Stats();
         stats.setDefault();
+
+        this.materials = startMaterial;
 
         this.weapons = new LinkedList<>();
 
@@ -128,6 +133,10 @@ public class Player {
         }
     }
 
+    public void addMaterial(int amount) {
+        this.materials += amount;
+    }
+
     private int calculateIFrames(double damage) {
         // 0.4 * damage% / 15%
         double damagePercentTaken = damage/stats.maxHP * 100;
@@ -139,5 +148,13 @@ public class Player {
 
     public Stats getStats() {
         return stats;
+    }
+
+    public int getCollectionRadius() {
+        return collectionRadius;
+    }
+
+    public int getMaterials() {
+        return materials;
     }
 }

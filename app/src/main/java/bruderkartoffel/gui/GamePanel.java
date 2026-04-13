@@ -3,6 +3,7 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.material.MaterialDrop;
 import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.wave.WaveHandler;
@@ -22,6 +23,7 @@ public class GamePanel extends JPanel {
 
     private final JLabel playerHitPoints;
     private final JLabel playerExperience;
+    private final JLabel playerMaterial;
     private final JLabel waveDisplay;
     private final JLabel levelUpDisplay;
 
@@ -42,12 +44,18 @@ public class GamePanel extends JPanel {
         playerHitPoints.setText(hp + "/" + maxHp);
         playerHitPoints.setBorder(new LineBorder(Color.BLACK, 4));
 
-        playerExperience = new JLabel();
+        this.playerExperience = new JLabel();
         playerExperience.setBounds(15, 70, 400, 40);
         playerExperience.setForeground(Color.WHITE);
         playerExperience.setFont(new Font("Bold", Font.BOLD, 25));
         playerExperience.setHorizontalAlignment(SwingConstants.RIGHT);
         playerExperience.setBorder(new LineBorder(Color.BLACK, 4));
+
+        this.playerMaterial = new JLabel();
+        playerMaterial.setBounds(60, 125, 300, 40);
+        playerMaterial.setForeground(Color.WHITE);
+        playerMaterial.setFont(new Font("Bold", Font.BOLD, 25));
+        playerMaterial.setHorizontalAlignment(SwingConstants.LEFT);
 
 
         this.waveDisplay = new JLabel();
@@ -65,6 +73,7 @@ public class GamePanel extends JPanel {
         setLayout(null);
         add(playerHitPoints);
         add(playerExperience);
+        add(playerMaterial);
         add(waveDisplay);
         add(levelUpDisplay);
 
@@ -126,6 +135,23 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.BLACK);
         g2d.drawOval((int)p.getPosX() - radius, (int)p.getPosY() - radius, size, size);
 
+
+        // draw materials
+        List<MaterialDrop> materialDrops;
+
+        synchronized (gameState.getMaterialDrops()) {
+            materialDrops = new ArrayList<>(gameState.getMaterialDrops());
+        }
+
+        for (MaterialDrop material: materialDrops) {
+            g2d.setColor(Color.GREEN);
+            size = material.getSize();
+            radius = size / 2;
+            Point pos = material.getPos();
+            g2d.fillOval(pos.x - radius, pos.y - radius, size, size);
+            g2d.setColor(Color.BLACK);
+            g2d.drawOval(pos.x - radius, pos.y - radius, size, size);
+        }
 
         // draw enemies
         List<Enemy> enemiesSnapshot;
@@ -264,6 +290,15 @@ public class GamePanel extends JPanel {
         g2d.fillRect(15 + width, 70, 400 - width, 40);
 
         playerExperience.setText("Lvl. " + level);
+
+
+        // player material count
+        g2d.setColor(Color.GREEN);
+        g2d.fillOval(15, 125, 40, 40);
+        g2d.setColor(Color.BLACK);
+        g2d.drawOval(15, 125, 40, 40);
+        playerMaterial.setText("" + gameState.getPlayer().getMaterials());
+
 
         // wave number and timer
         WaveHandler handler = gameState.getWaveHandler();
