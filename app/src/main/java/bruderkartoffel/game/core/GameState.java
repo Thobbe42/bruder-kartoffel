@@ -112,6 +112,10 @@ public class GameState {
         for (Enemy e: enemies) {
             e.update(this, dt, player.getPosX(), player.getPosY());
         }
+
+        for (MaterialDrop material: materialDrops) {
+            material.update(this, dt);
+        }
         updateCamera(screenSize);
         handleCollisions();
         waveHandler.update(dt);
@@ -179,7 +183,7 @@ public class GameState {
                     if (e.isDead()) {
                         int expVal = e.getExperienceValue();
                         Point pos = new Point((int)e.getPosX(), (int)e.getPosY());
-                        materialDrops.add(new MaterialDrop(expVal, 10, pos));
+                        materialDrops.add(new MaterialDrop(expVal, 10, pos, player.getStats().speed * 1.2));
                         // progressionHandler.addExperience(expVal);
                     }
                 }

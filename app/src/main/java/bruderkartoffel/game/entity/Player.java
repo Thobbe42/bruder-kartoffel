@@ -10,6 +10,7 @@ public class Player {
 
     private double posX, posY;
     private int size = 70;
+    private int collectionRadius = 200;
 
     private List<Weapon> weapons;
     private int weaponCount;
@@ -147,5 +148,9 @@ public class Player {
 
     public Stats getStats() {
         return stats;
+    }
+
+    public int getCollectionRadius() {
+        return collectionRadius;
     }
 }
