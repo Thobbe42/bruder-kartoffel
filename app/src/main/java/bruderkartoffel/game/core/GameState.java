@@ -12,6 +12,7 @@ import bruderkartoffel.game.wave.WaveHandler;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GameState {
 
@@ -35,11 +36,15 @@ public class GameState {
     private WaveHandler waveHandler;
     private ProgressionHandler progressionHandler;
 
+    private Consumer<Phase> updateUi;
+
     /**
      * Creates a new GameState with default values.
      * Default values are 20 player HP and a 2500x2500 World.
      */
-    public GameState() {
+    public GameState(Consumer<Phase> updateUi) {
+
+        this.updateUi = updateUi;
 
         this.phase = Phase.INIT;
         this.waveHandler = new WaveHandler(this);
@@ -277,6 +282,7 @@ public class GameState {
 
     public void setPhase(Phase phase) {
         this.phase = phase;
+        updateUi.accept(phase);
     }
 
     public Phase getPhase() {

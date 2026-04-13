@@ -12,6 +12,7 @@ public class Mainframe extends JFrame {
 
     private GamePanel gamePanel;
     private PauseMenuPanel pausePanel;
+    private LevelUpPanel levelUpPanel;
     private GameState gameState;
     private GameClock clock;
     private Thread clockThread;
@@ -29,14 +30,16 @@ public class Mainframe extends JFrame {
         initKeyHandling();
 
         // initialize GameState, GamePanel, and Clock
-        gameState = new GameState();
+        gameState = new GameState(this::updateUiForPhase);
         gamePanel = new GamePanel(gameState);
         pausePanel = new PauseMenuPanel(this::exitGame, gameState::setPhase);
+        levelUpPanel = new LevelUpPanel(gameState.getProgressionHandler());
 
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setLayout(null);
         layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(pausePanel, JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(levelUpPanel, JLayeredPane.MODAL_LAYER);
 
         layeredPane.addComponentListener(new ComponentAdapter() {
             @Override
@@ -46,6 +49,10 @@ public class Mainframe extends JFrame {
 
                 gamePanel.setBounds(0, 0, w, h);
                 pausePanel.setBounds(0, 0, w, h);
+                levelUpPanel.setBounds(0, 0, w, h);
+
+                if (!levelUpPanel.isInited())
+                    levelUpPanel.init(gameState.getPlayer().getStats());
             }
         });
 
@@ -82,6 +89,25 @@ public class Mainframe extends JFrame {
             }
             System.exit(0);
         }).start();
+    }
+
+
+    private void updateUiForPhase(GameState.Phase phase) {
+        switch (phase) {
+            case WAVE -> {
+                pausePanel.setVisible(false);
+                levelUpPanel.setVisible(false);
+            }
+
+            case PAUSE -> {
+                pausePanel.setVisible(true);
+            }
+
+            case WAVE_END -> {
+                pausePanel.setVisible(false);
+                levelUpPanel.setVisible(true);
+            }
+        }
     }
 
     private void initKeyHandling() {

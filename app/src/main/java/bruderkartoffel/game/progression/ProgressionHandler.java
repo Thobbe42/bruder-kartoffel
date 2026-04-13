@@ -5,6 +5,7 @@ import bruderkartoffel.game.entity.Stats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class ProgressionHandler {
 
@@ -20,6 +21,8 @@ public class ProgressionHandler {
 
     private List<LevelUp> currentLevelUps;
     private boolean active;
+
+    private Consumer<List<LevelUp>> setLevels;
 
 
     public ProgressionHandler(Player player) {
@@ -56,6 +59,8 @@ public class ProgressionHandler {
         }
 
         this.active = true;
+        
+        setLevels.accept(currentLevelUps);
     }
 
     public void apply(LevelUp levelUp) {
@@ -71,6 +76,11 @@ public class ProgressionHandler {
         }
         levelUpsInWave--;
         active = false;
+    }
+
+
+    public void registerLevelConsumer(Consumer<List<LevelUp>> setLevels) {
+        this.setLevels = setLevels;
     }
 
     public double getExp() {

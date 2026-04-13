@@ -19,7 +19,7 @@ public class WaveHandler {
             new WaveBuilder(10)
                     .spawnGroup(0, 16)
                     .spawnGroup(4, 25)
-                    .spawnGroup(10, 3)
+                    .spawnGroup(11, 3)
                     .spawnGroup(15, 3)
                     .build(),
             new WaveBuilder(25)
