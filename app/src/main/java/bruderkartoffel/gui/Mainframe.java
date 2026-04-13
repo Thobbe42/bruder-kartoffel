@@ -32,7 +32,7 @@ public class Mainframe extends JFrame {
         // initialize GameState, GamePanel, and Clock
         gameState = new GameState();
         gamePanel = new GamePanel(gameState);
-        pausePanel = new PauseMenuPanel();
+        pausePanel = new PauseMenuPanel(this::exitGame, gameState::setPhase);
 
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setLayout(null);
@@ -63,37 +63,35 @@ public class Mainframe extends JFrame {
     }
 
 
+    private void exitGame() {
+        new Thread(() -> {
+            clock.stop();
+            try {
+                clockThread.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            System.exit(0);
+        }).start();
+    }
+
     private void initKeyHandling() {
 
         JRootPane root = getRootPane();
         InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap am = root.getActionMap();
 
-        im.put(KeyStroke.getKeyStroke("ESCAPE"), "exit");
-        im.put(KeyStroke.getKeyStroke("ENTER"), "enter");
+        im.put(KeyStroke.getKeyStroke("ESCAPE"), "esc");
 
-        am.put("exit", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                new Thread(() -> {
-                    clock.stop();
-                    try {
-                        clockThread.join();
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    System.exit(0);
-                }).start();
-            }
-        });
-
-        am.put("enter", new AbstractAction() {
+        am.put("esc", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (gameState.getPhase() == GameState.Phase.WAVE) {
+                if (gameState.getPhase() != GameState.Phase.PAUSE) {
+                    pausePanel.setPausedPhase(gameState.getPhase());
                     gameState.setPhase(GameState.Phase.PAUSE);
                     pausePanel.setVisible(true);
                 } else {
-                    gameState.setPhase(GameState.Phase.WAVE);
+                    gameState.setPhase(pausePanel.getPausedPhase());
                     pausePanel.setVisible(false);
                 }
             }
