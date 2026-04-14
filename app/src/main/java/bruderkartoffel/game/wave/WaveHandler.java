@@ -18,6 +18,7 @@ public class WaveHandler {
     private List<Wave> waveConfigs = List.of(
             new WaveBuilder(10)
                     .spawnGroup(0, 16)
+                    .spawnTrees(2, 5)
                     .spawnGroup(4, 25)
                     .spawnGroup(11, 3)
                     .spawnGroup(15, 3)

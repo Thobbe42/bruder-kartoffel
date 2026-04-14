@@ -53,6 +53,7 @@ public class GameState {
 
         this.player = new Player(40);
         this.enemies = new LinkedList<>();
+        this.trees = new LinkedList<>();
         this.materialDrops = new LinkedList<>();
 
         this.progressionHandler = new ProgressionHandler(player);
@@ -111,6 +112,10 @@ public class GameState {
 
         for (Enemy e: enemies) {
             e.update(this, dt, player.getPosX(), player.getPosY());
+        }
+
+        for (Tree t: trees) {
+            t.update();
         }
 
         for (MaterialDrop material: materialDrops) {
@@ -360,5 +365,9 @@ public class GameState {
 
     public List<MaterialDrop> getMaterialDrops() {
         return materialDrops;
+    }
+
+    public List<Tree> getTrees() {
+        return this.trees;
     }
 }

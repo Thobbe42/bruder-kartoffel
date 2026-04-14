@@ -3,6 +3,7 @@ package bruderkartoffel.gui;
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
+import bruderkartoffel.game.entity.Tree;
 import bruderkartoffel.game.material.MaterialDrop;
 import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
@@ -179,6 +180,35 @@ public class GamePanel extends JPanel {
                     // enemy border
                     g2d.setColor(Color.BLACK);
                     g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+                }
+            }
+        }
+
+        // draw trees
+        List<Tree> treeSnapshot;
+
+        synchronized (gameState.getTrees()) {
+            treeSnapshot = gameState.getTrees();
+        }
+
+        for (Tree t : treeSnapshot) {
+            switch (t.getRenderType()) {
+                case ENTITY -> {
+                    g2d.setColor(new Color(0, 100, 0));
+                    size = t.getSize();
+                    radius = size / 2;
+                    g2d.fillOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
+
+                    // tree border
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
+                }
+
+                case SPAWN_INDICATOR -> {
+                    g2d.setColor(new Color(0, 100, 0));
+                    size = t.getSize() - 15;
+                    radius = size / 2;
+                    g2d.fillOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
                 }
             }
         }

@@ -9,13 +9,15 @@ public class Tree {
 
     private boolean dead;
 
-    private double posX, posY;  
+    private double posX, posY;
+    private int size;
 
     public Tree() {
         this.spawnBehavior = new SpawnBehavior();
         this.hitPoints = 20;
         this.experienceValue = 3;
         this.dead = false;
+        this.size = 60;
     }
 
     public void update() {
@@ -51,6 +53,14 @@ public class Tree {
         this.posY = posY;
     }
 
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+
     public boolean isDead() {
         return dead;
     }
@@ -61,5 +71,9 @@ public class Tree {
 
     public int getExperienceValue() {
         return experienceValue;
+    }
+
+    public int getSize() {
+        return size;
     }
 }
