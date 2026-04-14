@@ -80,7 +80,9 @@ public class WaveHandler {
         for (WaveEvent e: currentWave.getWaveEvents()) {
             if (!e.isTriggered() && timeStamp >= e.getTime()) {
                 // trigger event
-                gameState.spawnEnemyBatch(e.getCount());
+                if (e instanceof EnemyWaveEvent) {
+                    gameState.spawnEnemyBatch(((EnemyWaveEvent) e).getCount());
+                }
                 e.setTriggered();
             }
         }

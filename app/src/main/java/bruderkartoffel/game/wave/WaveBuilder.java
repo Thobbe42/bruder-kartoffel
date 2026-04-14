@@ -13,13 +13,13 @@ class WaveBuilder {
     }
 
     public WaveBuilder spawn(double time, int count) {
-        events.add(new WaveEvent(time, count));
+        events.add(new EnemyWaveEvent(time, count));
         return this;
     }
 
     public WaveBuilder spawnGroup(double time, int... counts) {
         for (int c : counts) {
-            events.add(new WaveEvent(time, c));
+            events.add(new EnemyWaveEvent(time, c));
         }
         return this;
     }
