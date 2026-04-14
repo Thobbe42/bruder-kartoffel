@@ -24,6 +24,11 @@ class WaveBuilder {
         return this;
     }
 
+    public WaveBuilder spawnTrees(double time, int count) {
+        events.add(new TreeWaveEvent(time, count));
+        return this;
+    }
+
     public Wave build() {
         return new Wave(duration, events);
     }

@@ -82,6 +82,8 @@ public class WaveHandler {
                 // trigger event
                 if (e instanceof EnemyWaveEvent) {
                     gameState.spawnEnemyBatch(((EnemyWaveEvent) e).getCount());
+                } else if (e instanceof TreeWaveEvent) {
+                    gameState.spawnTrees(((TreeWaveEvent) e).getCount());
                 }
                 e.setTriggered();
             }

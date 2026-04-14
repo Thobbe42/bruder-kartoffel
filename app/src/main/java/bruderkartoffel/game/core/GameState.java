@@ -2,9 +2,8 @@ package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
 import bruderkartoffel.game.entity.Player;
-import bruderkartoffel.game.entity.Stats;
+import bruderkartoffel.game.entity.Tree;
 import bruderkartoffel.game.material.MaterialDrop;
-import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
@@ -27,6 +26,7 @@ public class GameState {
     private Player player;
     private List<Enemy> enemies;
     private List<MaterialDrop> materialDrops;
+    private List<Tree> trees;
 
     private Dimension worldSize;
     private Dimension mapSize;
@@ -280,6 +280,35 @@ public class GameState {
             double posY = baseY + r * Math.sin(angle);
 
             spawnEnemyAt(posX, posY);
+        }
+    }
+
+    public void spawnTrees(int amount) {
+
+        for (int i = 0; i < amount; i++) {
+
+
+            double baseX, baseY;
+            int protectedRadius = player.getSize() * 3;
+            int radius = 50 + (amount * 4);
+            double dist;
+
+            int border = (worldSize.width - mapSize.width) / 2;
+            do {
+                baseX = Math.random() * (mapSize.getWidth() - 2 * radius) + border + radius;
+                baseY = Math.random() * (mapSize.getHeight() - 2 * radius) + border + radius;
+
+                double dx = player.getPosX() - baseX;
+                double dy = player.getPosY() - baseY;
+
+                dist = Math.sqrt(dx * dx + dy * dy);
+
+            } while (dist <= (protectedRadius + radius));
+
+            Tree t = new Tree();
+            t.setPosX(baseX);
+            t.setPosY(baseY);
+            trees.add(t);
         }
     }
 
