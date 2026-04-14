@@ -1,6 +1,7 @@
 package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
+import bruderkartoffel.game.entity.Entity;
 import bruderkartoffel.game.entity.Player;
 import bruderkartoffel.game.entity.Tree;
 import bruderkartoffel.game.material.MaterialDrop;
@@ -24,9 +25,8 @@ public class GameState {
     public boolean up, left, down, right;
 
     private Player player;
-    private List<Enemy> enemies;
+    private List<Entity> entities;
     private List<MaterialDrop> materialDrops;
-    private List<Tree> trees;
 
     private Dimension worldSize;
     private Dimension mapSize;
@@ -52,8 +52,7 @@ public class GameState {
         this.waveHandler = new WaveHandler(this);
 
         this.player = new Player(40);
-        this.enemies = new LinkedList<>();
-        this.trees = new LinkedList<>();
+        this.entities = new LinkedList<>();
         this.materialDrops = new LinkedList<>();
 
         this.progressionHandler = new ProgressionHandler(player);
@@ -107,15 +106,11 @@ public class GameState {
 
     private void updateWave(double dt, Dimension screenSize) {
         player.update(this, dt);
-        enemies.removeIf(Enemy::isDead);
+        entities.removeIf(Entity::isDead);
         materialDrops.removeIf(m -> !m.isActive());
 
-        for (Enemy e: enemies) {
-            e.update(this, dt, player.getPosX(), player.getPosY());
-        }
-
-        for (Tree t: trees) {
-            t.update();
+        for (Entity e: entities) {
+            e.update(this, dt);
         }
 
         for (MaterialDrop material: materialDrops) {
@@ -173,7 +168,8 @@ public class GameState {
         for (Projectile proj: projectiles) {
             if (proj.isDisabled()) continue; // avoid infinite piercing within a single frame
 
-            for (Enemy e: enemies) {
+            for (Entity e: entities) {
+
                 if (e.isDead()) continue; // no collision with dead or spawning targets
 
                 double dx = proj.getPosX() - e.getPosX();
@@ -189,14 +185,17 @@ public class GameState {
                         int expVal = e.getExperienceValue();
                         Point pos = new Point((int)e.getPosX(), (int)e.getPosY());
                         materialDrops.add(new MaterialDrop(expVal, 10, pos, player.getStats().speed * 1.2));
-                        // progressionHandler.addExperience(expVal);
                     }
                 }
             }
         }
 
         //player-enemy collision
-        for (Enemy e: enemies) {
+        for (Entity en: entities) {
+            if (en.getEntityType() != Entity.EntityType.ENEMY) continue;
+
+            Enemy e = (Enemy)en;
+
             if (e.isDead()) continue; // avoid hits by enemies that died in the same frame
 
             double dx = e.getPosX() - player.getPosX();
@@ -313,7 +312,7 @@ public class GameState {
             Tree t = new Tree();
             t.setPosX(baseX);
             t.setPosY(baseY);
-            trees.add(t);
+            entities.add(t);
         }
     }
 
@@ -322,7 +321,7 @@ public class GameState {
 
         enemy.setPosX(posX);
         enemy.setPosY(posY);
-        enemies.add(enemy);
+        entities.add(enemy);
     }
 
 
@@ -330,8 +329,8 @@ public class GameState {
         return this.player;
     }
 
-    public List<Enemy> getEnemies() {
-        return enemies;
+    public List<Entity> getEntities() {
+        return entities;
     }
 
     public Dimension getWorldSize() {
@@ -367,7 +366,4 @@ public class GameState {
         return materialDrops;
     }
 
-    public List<Tree> getTrees() {
-        return this.trees;
-    }
 }

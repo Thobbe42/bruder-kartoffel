@@ -2,10 +2,10 @@ package bruderkartoffel.gui;
 
 import bruderkartoffel.game.core.GameState;
 import bruderkartoffel.game.entity.Enemy;
+import bruderkartoffel.game.entity.Entity;
 import bruderkartoffel.game.entity.Player;
 import bruderkartoffel.game.entity.Tree;
 import bruderkartoffel.game.material.MaterialDrop;
-import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.wave.WaveHandler;
 import bruderkartoffel.game.weapon.Projectile;
@@ -155,63 +155,21 @@ public class GamePanel extends JPanel {
         }
 
         // draw enemies
-        List<Enemy> enemiesSnapshot;
+        List<Entity> entitiesSnapshot;
 
-        synchronized (gameState.getEnemies()) {
-            enemiesSnapshot = new ArrayList<>(gameState.getEnemies());
+        synchronized (gameState.getEntities()) {
+            entitiesSnapshot = new ArrayList<>(gameState.getEntities());
         }
 
-        for (Enemy e: enemiesSnapshot) {
-
-            switch(e.getRenderType()) {
-                case SPAWN_INDICATOR -> {
-                    g2d.setColor(Color.RED);
-                    size = e.getSize() / 2;
-                    radius = size / 2;
-                    g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
-                }
-
-                case ENTITY -> {
-                    g2d.setColor(new Color(128, 0, 128));
-                    size = e.getSize();
-                    radius = size / 2;
-                    g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
-
-                    // enemy border
-                    g2d.setColor(Color.BLACK);
-                    g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
-                }
+        for (Entity e: entitiesSnapshot) {
+            switch (e.getEntityType()) {
+                case ENEMY -> drawEnemy(g2d, (Enemy) e);
+                case TREE -> drawTree(g2d, (Tree) e);
             }
         }
 
-        // draw trees
-        List<Tree> treeSnapshot;
 
-        synchronized (gameState.getTrees()) {
-            treeSnapshot = gameState.getTrees();
-        }
 
-        for (Tree t : treeSnapshot) {
-            switch (t.getRenderType()) {
-                case ENTITY -> {
-                    g2d.setColor(new Color(0, 100, 0));
-                    size = t.getSize();
-                    radius = size / 2;
-                    g2d.fillOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
-
-                    // tree border
-                    g2d.setColor(Color.BLACK);
-                    g2d.drawOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
-                }
-
-                case SPAWN_INDICATOR -> {
-                    g2d.setColor(new Color(0, 100, 0));
-                    size = t.getSize() - 15;
-                    radius = size / 2;
-                    g2d.fillOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
-                }
-            }
-        }
 
         // draw weapons
         for (Weapon weapon : p.getWeapons()) {
@@ -254,7 +212,7 @@ public class GamePanel extends JPanel {
                 g2d.drawOval((int) worldX - radius, (int) worldY - radius, size, size);
 
                 // weapon target lines
-                for (Enemy e : enemiesSnapshot) {
+                for (Entity e : entitiesSnapshot) {
                     if (e.isTargetable()) {
                         g2d.setColor(Color.BLUE);
                         g2d.drawLine(
@@ -343,6 +301,53 @@ public class GamePanel extends JPanel {
         levelUpDisplay.setText("" + ph.getLevelUpsInWave());
     }
 
+
+
+    private void drawEnemy(Graphics2D g2d, Enemy e) {
+
+        switch(e.getRenderMode()) {
+            case SPAWN_INDICATOR -> {
+                g2d.setColor(Color.RED);
+                int size = e.getSize() / 2;
+                int radius = size / 2;
+                g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+            }
+
+            case ENTITY -> {
+                g2d.setColor(new Color(128, 0, 128));
+                int size = e.getSize();
+                int radius = size / 2;
+                g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+
+                // enemy border
+                g2d.setColor(Color.BLACK);
+                g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+            }
+        }
+    }
+
+    private void drawTree(Graphics2D g2d, Tree t) {
+
+        switch (t.getRenderType()) {
+            case ENTITY -> {
+                g2d.setColor(new Color(0, 100, 0));
+                int size = t.getSize();
+                int radius = size / 2;
+                g2d.fillOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
+
+                // tree border
+                g2d.setColor(Color.BLACK);
+                g2d.drawOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
+            }
+
+            case SPAWN_INDICATOR -> {
+                g2d.setColor(new Color(0, 100, 0));
+                int size = t.getSize() - 15;
+                int radius = size / 2;
+                g2d.fillOval((int) t.getPosX() - radius, (int) t.getPosY() - radius, size, size);
+            }
+        }
+    }
 
 
     private void drawEndOfWave(Graphics2D g2d) {

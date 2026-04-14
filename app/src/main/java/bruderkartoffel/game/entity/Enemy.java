@@ -2,28 +2,26 @@ package bruderkartoffel.game.entity;
 
 import bruderkartoffel.game.core.GameState;
 
-public class Enemy {
+public class Enemy extends Entity{
 
-    private double posX, posY;
-    private int size = 50;
-    private int speed = 250;
     private int experienceValue;
 
     private double hitPoints;
     private double baseDamage;
+    private double speed = 250;
 
-    private boolean dead = false;
-
-    private SpawnBehavior spawnBehavior;
 
     public Enemy(double hitPoints, double baseDamage, int experienceValue) {
+        super();
         this.hitPoints = hitPoints;
         this.baseDamage = baseDamage;
         this.experienceValue = experienceValue;
         this.spawnBehavior = new SpawnBehavior();
+        this.size = 50;
     }
 
-    public void update(GameState gameState, double dt, double playerPosX, double playerPosY) {
+    @Override
+    public void update(GameState gameState, double dt) {
 
         if (spawnBehavior != null) {
             boolean done = spawnBehavior.update();
@@ -35,19 +33,22 @@ public class Enemy {
             return;
         }
 
+        double playerPosX = gameState.getPlayer().getPosX();
+        double playerPosY = gameState.getPlayer().getPosY();
+
         // avoid blobs
         double sepX = 0;
         double sepY = 0;
         int count = 0;
 
-        for (Enemy other: gameState.getEnemies()) {
+        for (Entity other: gameState.getEntities()) {
             if (other == this) continue;
 
             double dx = posX - other.getPosX();
             double dy = posY - other.getPosY();
 
             double distSq = dx * dx + dy * dy;
-            double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.9;
+            double minDist = (size/2.0 + other.getSize()/2.0) * 0.9;
 
             if (distSq < minDist * minDist && distSq > 0) {
                 double dist = Math.sqrt(distSq);
@@ -98,6 +99,12 @@ public class Enemy {
         posY = targetY;
     }
 
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.ENEMY;
+    }
+
+    @Override
     public void dealDamage(double damage) {
         hitPoints -= damage;
         if (hitPoints <= 0) {
@@ -105,46 +112,16 @@ public class Enemy {
         }
     }
 
-    public SpawnBehavior.RenderType getRenderType() {
-        if (spawnBehavior != null) return spawnBehavior.isVisible()
-                ? SpawnBehavior.RenderType.SPAWN_INDICATOR
-                : SpawnBehavior.RenderType.NONE;
-        return SpawnBehavior.RenderType.ENTITY;
-    }
-
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public boolean isDead() {
-        return dead;
-    }
-
-
     public double getBaseDamage() {
         return baseDamage;
     }
 
+    @Override
     public boolean isTargetable() {
         return spawnBehavior == null && !dead;
     }
 
+    @Override
     public int getExperienceValue() {
         return experienceValue;
     }

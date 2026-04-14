@@ -1,8 +1,8 @@
 package bruderkartoffel.game.entity;
 
-class SpawnBehavior {
+public class SpawnBehavior {
 
-    public enum RenderType {
+    public enum RenderMode {
         NONE,
         SPAWN_INDICATOR,
         ENTITY

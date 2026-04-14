@@ -1,16 +1,12 @@
 package bruderkartoffel.game.entity;
 
-public class Tree {
+import bruderkartoffel.game.core.GameState;
 
-    private SpawnBehavior spawnBehavior;
+public class Tree extends Entity {
 
     private double hitPoints;
     private int experienceValue;
 
-    private boolean dead;
-
-    private double posX, posY;
-    private int size;
 
     public Tree() {
         this.spawnBehavior = new SpawnBehavior();
@@ -20,7 +16,9 @@ public class Tree {
         this.size = 60;
     }
 
-    public void update() {
+    @Override
+    public void update(GameState gameState, double dt) {
+
         if (spawnBehavior != null) {
             boolean done = spawnBehavior.update();
 
@@ -31,6 +29,12 @@ public class Tree {
         }
     }
 
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.TREE;
+    }
+
+    @Override
     public void dealDamage(double damage) {
         hitPoints -= damage;
         if (hitPoints <= 0) {
@@ -38,42 +42,21 @@ public class Tree {
         }
     }
 
-    public SpawnBehavior.RenderType getRenderType() {
+    public SpawnBehavior.RenderMode getRenderType() {
         if (spawnBehavior != null) return spawnBehavior.isVisible()
-                ? SpawnBehavior.RenderType.SPAWN_INDICATOR
-                : SpawnBehavior.RenderType.NONE;
-        return SpawnBehavior.RenderType.ENTITY;
+                ? SpawnBehavior.RenderMode.SPAWN_INDICATOR
+                : SpawnBehavior.RenderMode.NONE;
+        return SpawnBehavior.RenderMode.ENTITY;
     }
 
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public boolean isDead() {
-        return dead;
-    }
-
+    @Override
     public boolean isTargetable() {
         return spawnBehavior == null && !dead;
     }
 
+    @Override
     public int getExperienceValue() {
         return experienceValue;
     }
 
-    public int getSize() {
-        return size;
-    }
 }
