@@ -161,22 +161,24 @@ public class GamePanel extends JPanel {
         }
 
         for (Enemy e: enemiesSnapshot) {
-            if (!e.isSpawning()) {
-                g2d.setColor(new Color(128, 0, 128));
-                size = e.getSize();
-                radius = size / 2;
-                g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
 
-                // enemy border
-                g2d.setColor(Color.BLACK);
-                g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
-            } else {
-                // blink animation
-                if (e.isShowSpawn()) {
+            switch(e.getRenderType()) {
+                case SPAWN_INDICATOR -> {
                     g2d.setColor(Color.RED);
                     size = e.getSize() / 2;
                     radius = size / 2;
                     g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+                }
+
+                case ENTITY -> {
+                    g2d.setColor(new Color(128, 0, 128));
+                    size = e.getSize();
+                    radius = size / 2;
+                    g2d.fillOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
+
+                    // enemy border
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawOval((int) e.getPosX() - radius, (int) e.getPosY() - radius, size, size);
                 }
             }
         }

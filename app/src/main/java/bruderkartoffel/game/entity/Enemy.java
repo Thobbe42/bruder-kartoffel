@@ -14,98 +14,88 @@ public class Enemy {
 
     private boolean dead = false;
 
-
-    private boolean spawning = true;
-    private boolean showSpawn = true;
-    private int blinkFrames = 5;
-    private int blinkCycles = 10;
+    private SpawnBehavior spawnBehavior;
 
     public Enemy(double hitPoints, double baseDamage, int experienceValue) {
         this.hitPoints = hitPoints;
         this.baseDamage = baseDamage;
         this.experienceValue = experienceValue;
+        this.spawnBehavior = new SpawnBehavior();
     }
 
     public void update(GameState gameState, double dt, double playerPosX, double playerPosY) {
 
-        if (!spawning) {
+        if (spawnBehavior != null) {
+            boolean done = spawnBehavior.update();
 
-            // avoid blobs
-            double sepX = 0;
-            double sepY = 0;
-            int count = 0;
-
-            for (Enemy other: gameState.getEnemies()) {
-                if (other == this) continue;
-
-                double dx = posX - other.getPosX();
-                double dy = posY - other.getPosY();
-
-                double distSq = dx * dx + dy * dy;
-                double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.8;
-
-                if (distSq < minDist * minDist && distSq > 0) {
-                    double dist = Math.sqrt(distSq);
-
-                    // normalize
-                    dx /= dist;
-                    dy /= dist;
-
-                    // push strength
-                    double strength = (minDist - dist);
-
-                    sepX += dx * strength;
-                    sepY += dy * strength;
-                    count++;
-                }
+            if (done) {
+                spawnBehavior = null;
             }
 
-            if (count > 0) {
-                sepX /= count;
-                sepY /= count;
+            return;
+        }
 
-                posX += sepX * 0.1;
-                posY += sepY * 0.1;
-            }
+        // avoid blobs
+        double sepX = 0;
+        double sepY = 0;
+        int count = 0;
 
+        for (Enemy other: gameState.getEnemies()) {
+            if (other == this) continue;
 
+            double dx = posX - other.getPosX();
+            double dy = posY - other.getPosY();
 
-            double dx = playerPosX - posX;
-            double dy = playerPosY - posY;
+            double distSq = dx * dx + dy * dy;
+            double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.9;
 
-            double length = Math.sqrt(dx * dx + dy * dy);
+            if (distSq < minDist * minDist && distSq > 0) {
+                double dist = Math.sqrt(distSq);
 
-            if (length != 0) {
-                dx /= length;
-                dy /= length;
-            }
+                // normalize
+                dx /= dist;
+                dy /= dist;
 
-            double targetX = posX + dx * speed * dt;
-            double targetY = posY + dy * speed * dt;
-            int border = (gameState.getWorldSize().width - gameState.getMapSize().width)/2;
+                // push strength
+                double strength = (minDist - dist);
 
-            if (targetX < size/2.0 + border) targetX = size/2.0 + border;
-            if (targetX > gameState.getWorldSize().width - border - size/2.0) targetX = gameState.getWorldSize().width - border - size/2.0;
-            if (targetY < size/2.0 + border) targetY = size/2.0 + border;
-            if (targetY > gameState.getWorldSize().height - border - size/2.0) targetY = gameState.getWorldSize().height - border - size/2.0;
-
-            posX = targetX;
-            posY = targetY;
-
-        } else {
-            // blink animation update
-            if (blinkCycles == 0) {
-                spawning = false;
-            } else {
-
-                blinkFrames--;
-                if (blinkFrames == 0) {
-                    showSpawn = !showSpawn;
-                    blinkFrames = 5;
-                    blinkCycles--;
-                }
+                sepX += dx * strength;
+                sepY += dy * strength;
+                count++;
             }
         }
+
+        if (count > 0) {
+            sepX /= count;
+            sepY /= count;
+
+            posX += sepX * 0.1;
+            posY += sepY * 0.1;
+        }
+
+
+
+        double dx = playerPosX - posX;
+        double dy = playerPosY - posY;
+
+        double length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length != 0) {
+            dx /= length;
+            dy /= length;
+        }
+
+        double targetX = posX + dx * speed * dt;
+        double targetY = posY + dy * speed * dt;
+        int border = (gameState.getWorldSize().width - gameState.getMapSize().width)/2;
+
+        if (targetX < size/2.0 + border) targetX = size/2.0 + border;
+        if (targetX > gameState.getWorldSize().width - border - size/2.0) targetX = gameState.getWorldSize().width - border - size/2.0;
+        if (targetY < size/2.0 + border) targetY = size/2.0 + border;
+        if (targetY > gameState.getWorldSize().height - border - size/2.0) targetY = gameState.getWorldSize().height - border - size/2.0;
+
+        posX = targetX;
+        posY = targetY;
     }
 
     public void dealDamage(double damage) {
@@ -113,6 +103,13 @@ public class Enemy {
         if (hitPoints <= 0) {
             dead = true;
         }
+    }
+
+    public SpawnBehavior.RenderType getRenderType() {
+        if (spawnBehavior != null) return spawnBehavior.isVisible()
+                ? SpawnBehavior.RenderType.SPAWN_INDICATOR
+                : SpawnBehavior.RenderType.NONE;
+        return SpawnBehavior.RenderType.ENTITY;
     }
 
     public void setPosX(double posX) {
@@ -139,20 +136,13 @@ public class Enemy {
         return dead;
     }
 
-    public boolean isSpawning() {
-        return spawning;
-    }
-
-    public boolean isShowSpawn() {
-        return showSpawn;
-    }
 
     public double getBaseDamage() {
         return baseDamage;
     }
 
     public boolean isTargetable() {
-        return !spawning && !dead;
+        return spawnBehavior == null && !dead;
     }
 
     public int getExperienceValue() {
