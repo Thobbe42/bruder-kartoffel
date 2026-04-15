@@ -1,5 +1,9 @@
 package bruderkartoffel.game.wave;
 
+import bruderkartoffel.game.wave.event.EnemyWaveEvent;
+import bruderkartoffel.game.wave.event.TreeWaveEvent;
+import bruderkartoffel.game.wave.event.WaveEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,14 +17,19 @@ class WaveBuilder {
     }
 
     public WaveBuilder spawn(double time, int count) {
-        events.add(new WaveEvent(time, count));
+        events.add(new EnemyWaveEvent(time, count));
         return this;
     }
 
     public WaveBuilder spawnGroup(double time, int... counts) {
         for (int c : counts) {
-            events.add(new WaveEvent(time, c));
+            events.add(new EnemyWaveEvent(time, c));
         }
+        return this;
+    }
+
+    public WaveBuilder spawnTrees(double time, int count) {
+        events.add(new TreeWaveEvent(time, count));
         return this;
     }
 

@@ -2,112 +2,109 @@ package bruderkartoffel.game.entity;
 
 import bruderkartoffel.game.core.GameState;
 
-public class Enemy {
+public class Enemy extends Entity{
 
-    private double posX, posY;
-    private int size = 50;
-    private int speed = 250;
     private int experienceValue;
 
     private double hitPoints;
     private double baseDamage;
+    private double speed = 250;
 
-    private boolean dead = false;
-
-
-    private boolean spawning = true;
-    private boolean showSpawn = true;
-    private int blinkFrames = 5;
-    private int blinkCycles = 10;
 
     public Enemy(double hitPoints, double baseDamage, int experienceValue) {
+        super();
         this.hitPoints = hitPoints;
         this.baseDamage = baseDamage;
         this.experienceValue = experienceValue;
+        this.spawnBehavior = new SpawnBehavior();
+        this.size = 50;
     }
 
-    public void update(GameState gameState, double dt, double playerPosX, double playerPosY) {
+    @Override
+    public void update(GameState gameState, double dt) {
 
-        if (!spawning) {
+        if (spawnBehavior != null) {
+            boolean done = spawnBehavior.update();
 
-            // avoid blobs
-            double sepX = 0;
-            double sepY = 0;
-            int count = 0;
-
-            for (Enemy other: gameState.getEnemies()) {
-                if (other == this) continue;
-
-                double dx = posX - other.getPosX();
-                double dy = posY - other.getPosY();
-
-                double distSq = dx * dx + dy * dy;
-                double minDist = (this.size/2.0 + other.getSize()/2.0) * 0.8;
-
-                if (distSq < minDist * minDist && distSq > 0) {
-                    double dist = Math.sqrt(distSq);
-
-                    // normalize
-                    dx /= dist;
-                    dy /= dist;
-
-                    // push strength
-                    double strength = (minDist - dist);
-
-                    sepX += dx * strength;
-                    sepY += dy * strength;
-                    count++;
-                }
+            if (done) {
+                spawnBehavior = null;
             }
 
-            if (count > 0) {
-                sepX /= count;
-                sepY /= count;
+            return;
+        }
 
-                posX += sepX * 0.1;
-                posY += sepY * 0.1;
-            }
+        double playerPosX = gameState.getPlayer().getPosX();
+        double playerPosY = gameState.getPlayer().getPosY();
 
+        // avoid blobs
+        double sepX = 0;
+        double sepY = 0;
+        int count = 0;
 
+        for (Entity other: gameState.getEntities()) {
+            if (other == this) continue;
 
-            double dx = playerPosX - posX;
-            double dy = playerPosY - posY;
+            double dx = posX - other.getPosX();
+            double dy = posY - other.getPosY();
 
-            double length = Math.sqrt(dx * dx + dy * dy);
+            double distSq = dx * dx + dy * dy;
+            double minDist = (size/2.0 + other.getSize()/2.0) * 0.9;
 
-            if (length != 0) {
-                dx /= length;
-                dy /= length;
-            }
+            if (distSq < minDist * minDist && distSq > 0) {
+                double dist = Math.sqrt(distSq);
 
-            double targetX = posX + dx * speed * dt;
-            double targetY = posY + dy * speed * dt;
-            int border = (gameState.getWorldSize().width - gameState.getMapSize().width)/2;
+                // normalize
+                dx /= dist;
+                dy /= dist;
 
-            if (targetX < size/2.0 + border) targetX = size/2.0 + border;
-            if (targetX > gameState.getWorldSize().width - border - size/2.0) targetX = gameState.getWorldSize().width - border - size/2.0;
-            if (targetY < size/2.0 + border) targetY = size/2.0 + border;
-            if (targetY > gameState.getWorldSize().height - border - size/2.0) targetY = gameState.getWorldSize().height - border - size/2.0;
+                // push strength
+                double strength = (minDist - dist);
 
-            posX = targetX;
-            posY = targetY;
-
-        } else {
-            // blink animation update
-            if (blinkCycles == 0) {
-                spawning = false;
-            } else {
-
-                blinkFrames--;
-                if (blinkFrames == 0) {
-                    showSpawn = !showSpawn;
-                    blinkFrames = 5;
-                    blinkCycles--;
-                }
+                sepX += dx * strength;
+                sepY += dy * strength;
+                count++;
             }
         }
+
+        if (count > 0) {
+            sepX /= count;
+            sepY /= count;
+
+            posX += sepX * 0.1;
+            posY += sepY * 0.1;
+        }
+
+
+
+        double dx = playerPosX - posX;
+        double dy = playerPosY - posY;
+
+        double length = Math.sqrt(dx * dx + dy * dy);
+
+        if (length != 0) {
+            dx /= length;
+            dy /= length;
+        }
+
+        double targetX = posX + dx * speed * dt;
+        double targetY = posY + dy * speed * dt;
+        int border = (gameState.getWorldSize().width - gameState.getMapSize().width)/2;
+
+        if (targetX < size/2.0 + border) targetX = size/2.0 + border;
+        if (targetX > gameState.getWorldSize().width - border - size/2.0) targetX = gameState.getWorldSize().width - border - size/2.0;
+        if (targetY < size/2.0 + border) targetY = size/2.0 + border;
+        if (targetY > gameState.getWorldSize().height - border - size/2.0) targetY = gameState.getWorldSize().height - border - size/2.0;
+
+        posX = targetX;
+        posY = targetY;
     }
 
+    @Override
+    public EntityType getEntityType() {
+        return EntityType.ENEMY;
+    }
+
+    @Override
     public void dealDamage(double damage) {
         hitPoints -= damage;
         if (hitPoints <= 0) {
@@ -115,46 +112,16 @@ public class Enemy {
         }
     }
 
-    public void setPosX(double posX) {
-        this.posX = posX;
-    }
-
-    public void setPosY(double posY) {
-        this.posY = posY;
-    }
-
-    public double getPosX() {
-        return posX;
-    }
-
-    public double getPosY() {
-        return posY;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public boolean isDead() {
-        return dead;
-    }
-
-    public boolean isSpawning() {
-        return spawning;
-    }
-
-    public boolean isShowSpawn() {
-        return showSpawn;
-    }
-
     public double getBaseDamage() {
         return baseDamage;
     }
 
+    @Override
     public boolean isTargetable() {
-        return !spawning && !dead;
+        return spawnBehavior == null && !dead;
     }
 
+    @Override
     public int getExperienceValue() {
         return experienceValue;
     }

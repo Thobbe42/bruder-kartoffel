@@ -9,15 +9,15 @@ import java.util.List;
 public class Player {
 
     private double posX, posY;
-    private int size = 70;
+    private final int size = 70;
     private int collectionRadius = 200;
 
-    private List<Weapon> weapons;
+    private final List<Weapon> weapons;
     private int weaponCount;
 
     private int iFrames = 0;
 
-    private Stats stats;
+    private final Stats stats;
 
     private int materials;
 
@@ -71,7 +71,7 @@ public class Player {
             int radius = size/2;
 
             // default weapon radius
-            int weaponRadius = (int)(radius * 2);
+            int weaponRadius = radius * 2;
 
             int space = 360 / weaponCount;
             int rotation = space;
@@ -141,7 +141,7 @@ public class Player {
         // 0.4 * damage% / 15%
         double damagePercentTaken = damage/stats.maxHP * 100;
         double time = 0.4 * (damagePercentTaken/15);
-        double invulnerabilityTime = Math.max(0.2, Math.min(0.4, time));
+        double invulnerabilityTime = Math.clamp(time, 0.2, 0.4);
 
         return (int)(invulnerabilityTime * 60);
     }

@@ -1,15 +1,13 @@
-package bruderkartoffel.game.wave;
+package bruderkartoffel.game.wave.event;
 
 public class WaveEvent {
 
     private double time;
-    private int count;
 
     private boolean triggered;
 
-    public WaveEvent(double time, int count) {
+    public WaveEvent(double time) {
         this.time = time;
-        this.count = count;
         this.triggered = false;
     }
 
@@ -17,9 +15,6 @@ public class WaveEvent {
         return time;
     }
 
-    public int getCount() {
-        return count;
-    }
 
     public boolean isTriggered() {
         return triggered;

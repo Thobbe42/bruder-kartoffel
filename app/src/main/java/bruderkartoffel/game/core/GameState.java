@@ -1,10 +1,10 @@
 package bruderkartoffel.game.core;
 
 import bruderkartoffel.game.entity.Enemy;
+import bruderkartoffel.game.entity.Entity;
 import bruderkartoffel.game.entity.Player;
-import bruderkartoffel.game.entity.Stats;
+import bruderkartoffel.game.entity.Tree;
 import bruderkartoffel.game.material.MaterialDrop;
-import bruderkartoffel.game.progression.LevelUp;
 import bruderkartoffel.game.progression.ProgressionHandler;
 import bruderkartoffel.game.weapon.Projectile;
 import bruderkartoffel.game.weapon.Weapon;
@@ -24,9 +24,9 @@ public class GameState {
 
     public boolean up, left, down, right;
 
-    private Player player;
-    private List<Enemy> enemies;
-    private List<MaterialDrop> materialDrops;
+    private final Player player;
+    private final List<Entity> entities;
+    private final List<MaterialDrop> materialDrops;
 
     private Dimension worldSize;
     private Dimension mapSize;
@@ -35,10 +35,10 @@ public class GameState {
 
     private Phase phase;
 
-    private WaveHandler waveHandler;
-    private ProgressionHandler progressionHandler;
+    private final WaveHandler waveHandler;
+    private final ProgressionHandler progressionHandler;
 
-    private Consumer<Phase> updateUi;
+    private final Consumer<Phase> updateUi;
 
     /**
      * Creates a new GameState with default values.
@@ -52,7 +52,7 @@ public class GameState {
         this.waveHandler = new WaveHandler(this);
 
         this.player = new Player(40);
-        this.enemies = new LinkedList<>();
+        this.entities = new LinkedList<>();
         this.materialDrops = new LinkedList<>();
 
         this.progressionHandler = new ProgressionHandler(player);
@@ -93,7 +93,7 @@ public class GameState {
         switch (phase) {
             case INIT -> updateInit(screenSize);
             case WAVE -> updateWave(dt, screenSize);
-            case WAVE_END -> updateWaveEnd(screenSize);
+            case WAVE_END -> updateWaveEnd();
         }
     }
 
@@ -106,11 +106,11 @@ public class GameState {
 
     private void updateWave(double dt, Dimension screenSize) {
         player.update(this, dt);
-        enemies.removeIf(Enemy::isDead);
+        entities.removeIf(Entity::isDead);
         materialDrops.removeIf(m -> !m.isActive());
 
-        for (Enemy e: enemies) {
-            e.update(this, dt, player.getPosX(), player.getPosY());
+        for (Entity e: entities) {
+            e.update(this, dt);
         }
 
         for (MaterialDrop material: materialDrops) {
@@ -121,7 +121,7 @@ public class GameState {
         waveHandler.update(dt);
     }
 
-    private void updateWaveEnd(Dimension screenSize) {
+    private void updateWaveEnd() {
         if (progressionHandler.getLevelUpsInWave() == 0) {
             waveHandler.nextWave();
         } else if (!progressionHandler.isActive()) {
@@ -147,8 +147,8 @@ public class GameState {
         double halfW = screenSize.getWidth() / 2.0;
         double halfH = screenSize.getHeight() / 2.0;
 
-        camera.x = (int)Math.max(halfW, Math.min(camera.x, worldSize.width - halfW));
-        camera.y = (int)Math.max(halfH, Math.min(camera.y, worldSize.height - halfH));
+        camera.x = (int) Math.clamp(camera.x, halfW, worldSize.width - halfW);
+        camera.y = (int) Math.clamp(camera.y, halfH, worldSize.height - halfH);
     }
 
     /**
@@ -168,7 +168,8 @@ public class GameState {
         for (Projectile proj: projectiles) {
             if (proj.isDisabled()) continue; // avoid infinite piercing within a single frame
 
-            for (Enemy e: enemies) {
+            for (Entity e: entities) {
+
                 if (e.isDead()) continue; // no collision with dead or spawning targets
 
                 double dx = proj.getPosX() - e.getPosX();
@@ -184,14 +185,17 @@ public class GameState {
                         int expVal = e.getExperienceValue();
                         Point pos = new Point((int)e.getPosX(), (int)e.getPosY());
                         materialDrops.add(new MaterialDrop(expVal, 10, pos, player.getStats().speed * 1.2));
-                        // progressionHandler.addExperience(expVal);
                     }
                 }
             }
         }
 
         //player-enemy collision
-        for (Enemy e: enemies) {
+        for (Entity en: entities) {
+            if (en.getEntityType() != Entity.EntityType.ENEMY) continue;
+
+            Enemy e = (Enemy)en;
+
             if (e.isDead()) continue; // avoid hits by enemies that died in the same frame
 
             double dx = e.getPosX() - player.getPosX();
@@ -283,12 +287,41 @@ public class GameState {
         }
     }
 
+    public void spawnTrees(int amount) {
+
+        for (int i = 0; i < amount; i++) {
+
+
+            double baseX, baseY;
+            int protectedRadius = player.getSize() * 3;
+            int radius = 50 + (amount * 4);
+            double dist;
+
+            int border = (worldSize.width - mapSize.width) / 2;
+            do {
+                baseX = Math.random() * (mapSize.getWidth() - 2 * radius) + border + radius;
+                baseY = Math.random() * (mapSize.getHeight() - 2 * radius) + border + radius;
+
+                double dx = player.getPosX() - baseX;
+                double dy = player.getPosY() - baseY;
+
+                dist = Math.sqrt(dx * dx + dy * dy);
+
+            } while (dist <= (protectedRadius + radius));
+
+            Tree t = new Tree();
+            t.setPosX(baseX);
+            t.setPosY(baseY);
+            entities.add(t);
+        }
+    }
+
     private void spawnEnemyAt(double posX, double posY) {
         Enemy enemy = new Enemy(10, 1, 1);
 
         enemy.setPosX(posX);
         enemy.setPosY(posY);
-        enemies.add(enemy);
+        entities.add(enemy);
     }
 
 
@@ -296,8 +329,8 @@ public class GameState {
         return this.player;
     }
 
-    public List<Enemy> getEnemies() {
-        return enemies;
+    public List<Entity> getEntities() {
+        return entities;
     }
 
     public Dimension getWorldSize() {
@@ -332,4 +365,5 @@ public class GameState {
     public List<MaterialDrop> getMaterialDrops() {
         return materialDrops;
     }
+
 }

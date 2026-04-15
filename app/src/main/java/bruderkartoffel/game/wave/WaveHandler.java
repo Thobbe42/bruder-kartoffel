@@ -1,6 +1,9 @@
 package bruderkartoffel.game.wave;
 
 import bruderkartoffel.game.core.GameState;
+import bruderkartoffel.game.wave.event.EnemyWaveEvent;
+import bruderkartoffel.game.wave.event.TreeWaveEvent;
+import bruderkartoffel.game.wave.event.WaveEvent;
 import bruderkartoffel.game.weapon.Weapon;
 
 import java.util.List;
@@ -18,6 +21,7 @@ public class WaveHandler {
     private List<Wave> waveConfigs = List.of(
             new WaveBuilder(10)
                     .spawnGroup(0, 16)
+                    .spawnTrees(2, 5)
                     .spawnGroup(4, 25)
                     .spawnGroup(11, 3)
                     .spawnGroup(15, 3)
@@ -68,7 +72,7 @@ public class WaveHandler {
         this.timer -= dt;
         if (timer <= 0) {
             gameState.setPhase(GameState.Phase.WAVE_END);
-            gameState.getEnemies().clear();
+            gameState.getEntities().clear();
             gameState.getMaterialDrops().clear();
             for (Weapon w: gameState.getPlayer().getWeapons()) {
                 w.getProjectiles().clear();
@@ -80,7 +84,11 @@ public class WaveHandler {
         for (WaveEvent e: currentWave.getWaveEvents()) {
             if (!e.isTriggered() && timeStamp >= e.getTime()) {
                 // trigger event
-                gameState.spawnEnemyBatch(e.getCount());
+                if (e instanceof EnemyWaveEvent) {
+                    gameState.spawnEnemyBatch(((EnemyWaveEvent) e).getCount());
+                } else if (e instanceof TreeWaveEvent) {
+                    gameState.spawnTrees(((TreeWaveEvent) e).getCount());
+                }
                 e.setTriggered();
             }
         }

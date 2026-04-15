@@ -1,7 +1,7 @@
 package bruderkartoffel.game.weapon;
 
 import bruderkartoffel.game.core.GameState;
-import bruderkartoffel.game.entity.Enemy;
+import bruderkartoffel.game.entity.Entity;
 import bruderkartoffel.game.entity.Player;
 import bruderkartoffel.game.entity.Stats;
 
@@ -94,7 +94,7 @@ public class Weapon {
 
     private double calculateRotationAngle(GameState gameState) {
 
-        Enemy target = getTarget(gameState);
+        Entity target = getTarget(gameState);
         if (target == null) return 0;
 
         double wx = gameState.getPlayer().getPosX() + posX;
@@ -105,15 +105,15 @@ public class Weapon {
         return Math.atan2(targetDy, targetDx);
     }
 
-    private Enemy getTarget(GameState gameState) {
+    private Entity getTarget(GameState gameState) {
 
-        Enemy closest = null;
+        Entity closest = null;
         double minDistSq = range * range;
 
         double wx = gameState.getPlayer().getPosX() + posX;
         double wy = gameState.getPlayer().getPosY() + posY;
 
-        for (Enemy e : gameState.getEnemies()) {
+        for (Entity e : gameState.getEntities()) {
             if (e.isTargetable()) {
                 double dx = e.getPosX() - wx;
                 double dy = e.getPosY() - wy;
