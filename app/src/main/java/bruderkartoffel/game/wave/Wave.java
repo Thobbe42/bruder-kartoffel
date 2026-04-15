@@ -1,5 +1,7 @@
 package bruderkartoffel.game.wave;
 
+import bruderkartoffel.game.wave.event.WaveEvent;
+
 import java.util.List;
 
 public class Wave {

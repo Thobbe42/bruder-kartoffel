@@ -1,6 +1,9 @@
 package bruderkartoffel.game.wave;
 
 import bruderkartoffel.game.core.GameState;
+import bruderkartoffel.game.wave.event.EnemyWaveEvent;
+import bruderkartoffel.game.wave.event.TreeWaveEvent;
+import bruderkartoffel.game.wave.event.WaveEvent;
 import bruderkartoffel.game.weapon.Weapon;
 
 import java.util.List;

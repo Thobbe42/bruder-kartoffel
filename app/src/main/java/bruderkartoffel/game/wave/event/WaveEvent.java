@@ -1,4 +1,4 @@
-package bruderkartoffel.game.wave;
+package bruderkartoffel.game.wave.event;
 
 public class WaveEvent {
 

@@ -24,9 +24,9 @@ public class GameState {
 
     public boolean up, left, down, right;
 
-    private Player player;
-    private List<Entity> entities;
-    private List<MaterialDrop> materialDrops;
+    private final Player player;
+    private final List<Entity> entities;
+    private final List<MaterialDrop> materialDrops;
 
     private Dimension worldSize;
     private Dimension mapSize;
@@ -35,10 +35,10 @@ public class GameState {
 
     private Phase phase;
 
-    private WaveHandler waveHandler;
-    private ProgressionHandler progressionHandler;
+    private final WaveHandler waveHandler;
+    private final ProgressionHandler progressionHandler;
 
-    private Consumer<Phase> updateUi;
+    private final Consumer<Phase> updateUi;
 
     /**
      * Creates a new GameState with default values.
@@ -93,7 +93,7 @@ public class GameState {
         switch (phase) {
             case INIT -> updateInit(screenSize);
             case WAVE -> updateWave(dt, screenSize);
-            case WAVE_END -> updateWaveEnd(screenSize);
+            case WAVE_END -> updateWaveEnd();
         }
     }
 
@@ -121,7 +121,7 @@ public class GameState {
         waveHandler.update(dt);
     }
 
-    private void updateWaveEnd(Dimension screenSize) {
+    private void updateWaveEnd() {
         if (progressionHandler.getLevelUpsInWave() == 0) {
             waveHandler.nextWave();
         } else if (!progressionHandler.isActive()) {
@@ -147,8 +147,8 @@ public class GameState {
         double halfW = screenSize.getWidth() / 2.0;
         double halfH = screenSize.getHeight() / 2.0;
 
-        camera.x = (int)Math.max(halfW, Math.min(camera.x, worldSize.width - halfW));
-        camera.y = (int)Math.max(halfH, Math.min(camera.y, worldSize.height - halfH));
+        camera.x = (int) Math.clamp(camera.x, halfW, worldSize.width - halfW);
+        camera.y = (int) Math.clamp(camera.y, halfH, worldSize.height - halfH);
     }
 
     /**
