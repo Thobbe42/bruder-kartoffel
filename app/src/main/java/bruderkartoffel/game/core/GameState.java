@@ -183,8 +183,12 @@ public class GameState {
                     e.dealDamage(proj.getDamage());
                     if (e.isDead()) {
                         int expVal = e.getExperienceValue();
-                        Point pos = new Point((int)e.getPosX(), (int)e.getPosY());
-                        materialDrops.add(new MaterialDrop(expVal, 10, pos, player.getStats().speed * 1.2));
+                        for (int i = 0; i <  expVal; i++) {
+                            int offsetX = (int)(Math.random() * 20);
+                            int offsetY = (int)(Math.random() * 20);
+                            Point pos = new Point((int) e.getPosX() + offsetX, (int) e.getPosY() + offsetY);
+                            materialDrops.add(new MaterialDrop(expVal, 10, pos, player.getStats().speed * 1.2));
+                        }
                     }
                 }
             }
