@@ -3,7 +3,7 @@ package bruderkartoffel.game.entity;
 public class Stats {
 
     public double maxHP;
-    public  double hp;
+    public double hp;
 
     public double damage;
     public double attackSpeed;
@@ -32,6 +32,15 @@ public class Stats {
     public void addMaxHP(double value) {
         this.maxHP += value;
         this.hp += value;
+    }
+
+    /**
+     * Used to set HP to a flat value.
+     * Used e.g. for new Waves to return player to full HP.
+     * @param value The Flat HP value to set
+     */
+    public void setHp(double value) {
+        this.hp = value;
     }
 
     public void addDamage(double value) {

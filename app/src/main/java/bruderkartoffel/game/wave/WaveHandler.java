@@ -1,6 +1,7 @@
 package bruderkartoffel.game.wave;
 
 import bruderkartoffel.game.core.GameState;
+import bruderkartoffel.game.entity.Player;
 import bruderkartoffel.game.wave.event.EnemyWaveEvent;
 import bruderkartoffel.game.wave.event.TreeWaveEvent;
 import bruderkartoffel.game.wave.event.WaveEvent;
@@ -98,6 +99,11 @@ public class WaveHandler {
         if (gameState.getPhase() == GameState.Phase.WAVE) return;
 
         if (wave >= waveConfigs.size()) return;
+
+        // state fixup for new wave
+
+        Player p = gameState.getPlayer();
+        p.getStats().setHp(p.getMaxHitPoints());
 
         this.currentWave = waveConfigs.get(wave);
         this.timer = currentWave.getDuration();
